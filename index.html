@@ -493,11 +493,15 @@
       <label for="gh-token">Personal Access Token <span class="badge">used to trigger the monitor</span></label>
       <input type="password" id="gh-token" placeholder="github_pat_…" autocomplete="off">
       <div class="hint">Fine-grained PAT with <strong>Actions: Read &amp; Write</strong> permission on your TeeTimeSearch repo. <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" style="color:var(--green-bright);">Create one here ↗</a></div>
+      <div style="margin-top:6px;display:flex;align-items:center;gap:8px;">
+        <input type="checkbox" id="save-token" style="width:auto;margin:0;">
+        <label for="save-token" style="margin:0;font-size:12px;color:var(--text-light);cursor:pointer;">Remember token on this device</label>
+      </div>
       <div class="field-error" id="err-gh-token">Please enter your GitHub token.</div>
     </div>
     <div class="field">
       <label for="gh-owner">GitHub Username</label>
-      <input type="text" id="gh-owner" placeholder="jasonsharkey">
+      <input type="text" id="gh-owner" placeholder="jasonsharkey" value="jasonsharkey">
       <div class="field-error" id="err-gh-owner">Please enter your GitHub username.</div>
     </div>
   </div>
@@ -552,6 +556,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Update hint when interval changes
   document.getElementById('poll-interval').addEventListener('change', updateIntervalHint);
+
+  // ── Restore saved token from localStorage ──────────────────────────────
+  try {
+    const saved = localStorage.getItem('gh_pat');
+    if (saved) {
+      document.getElementById('gh-token').value = saved;
+      document.getElementById('save-token').checked = true;
+    }
+  } catch(e) {}
+
+  // ── Auto-save token when user types / checks the box ──────────────────
+  document.getElementById('gh-token').addEventListener('input', maybeSaveToken);
+  document.getElementById('save-token').addEventListener('change', maybeSaveToken);
 });
 
 function setDefaultDates() {
@@ -660,6 +677,19 @@ function validate() {
   return ok;
 }
 
+// ── Token persistence ────────────────────────────────────────────────────────
+function maybeSaveToken() {
+  try {
+    const save  = document.getElementById('save-token').checked;
+    const token = document.getElementById('gh-token').value.trim();
+    if (save && token) {
+      localStorage.setItem('gh_pat', token);
+    } else {
+      localStorage.removeItem('gh_pat');
+    }
+  } catch(e) {}
+}
+
 // ── Trigger GitHub Actions workflow ──────────────────────────────────────────
 async function triggerWorkflow() {
   if (!validate()) return;
@@ -745,6 +775,7 @@ async function triggerWorkflow() {
     });
 
     if (resp.status === 204) {
+      maybeSaveToken();  // persist if checkbox ticked
       // Success — 204 No Content is GitHub's success response for dispatch
       const schedObj = SCHEDULES.find(s => s.id === sched) || { name: sched };
       const dateDesc = watchDates
@@ -865,6 +896,7 @@ function resetForm() {
   document.getElementById('time-end').value   = '11:30';
   document.getElementById('poll-interval').value = '30';
   document.getElementById('output-panel').classList.remove('visible');
+  try { if (!document.getElementById('save-token').checked) localStorage.removeItem('gh_pat'); } catch(e) {}
   ['username','password','login-type','time','gh-token','gh-owner'].forEach(id => {
     const el = document.getElementById('err-'+id);
     if (el) el.classList.remove('visible');
