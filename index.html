@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>⛳ ForeUp Tee Time Monitor</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500&display=swap');
+
+  :root {
+    --green-dark:   #1a2e1a;
+    --green-mid:    #2d4a2d;
+    --green-bright: #4a7c4a;
+    --green-light:  #7ab87a;
+    --gold:         #c9a84c;
+    --gold-light:   #e8c97a;
+    --cream:        #f5f0e8;
+    --cream-dark:   #e8e0d0;
+    --sand:         #d4c4a0;
+    --text-dark:    #1a1a14;
+    --text-mid:     #3a3a2e;
+    --text-light:   #6a6a5a;
+    --error:        #c0392b;
+    --radius:       6px;
+    --shadow:       0 4px 24px rgba(26,46,26,0.18);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--green-dark);
+    min-height: 100vh;
+    color: var(--text-dark);
+    background-image:
+      radial-gradient(ellipse at 20% 0%, rgba(74,124,74,0.3) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 100%, rgba(201,168,76,0.15) 0%, transparent 50%);
+  }
+
+  .header {
+    text-align: center;
+    padding: 44px 24px 28px;
+  }
+  .header-flag { font-size: 48px; display: block; margin-bottom: 10px; }
+  .header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(26px, 5vw, 42px);
+    font-weight: 900;
+    color: var(--cream);
+    letter-spacing: -0.5px;
+    line-height: 1.1;
+  }
+  .header h1 span { color: var(--gold); }
+  .header p { margin-top: 8px; font-size: 13px; color: var(--green-light); font-family: 'DM Mono', monospace; }
+
+  .card {
+    max-width: 720px;
+    margin: 0 auto 32px;
+    background: var(--cream);
+    border-radius: 12px;
+    box-shadow: var(--shadow), 0 0 0 1px rgba(201,168,76,0.2);
+    overflow: hidden;
+  }
+
+  .section { padding: 26px 30px; border-bottom: 1px solid var(--cream-dark); }
+  .section:last-child { border-bottom: none; }
+
+  .section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--green-bright);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .section-label::after { content:''; flex:1; height:1px; background:var(--cream-dark); }
+
+  .field { margin-bottom: 14px; }
+  .field:last-child { margin-bottom: 0; }
+
+  label { display:block; font-size:12px; font-weight:500; color:var(--text-mid); margin-bottom:4px; }
+
+  input[type="text"], input[type="password"], input[type="email"],
+  input[type="date"], input[type="number"], select {
+    width: 100%;
+    padding: 9px 12px;
+    border: 1.5px solid var(--cream-dark);
+    border-radius: var(--radius);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    color: var(--text-dark);
+    background: #fff;
+    transition: border-color 0.15s, box-shadow 0.15s;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+  input:focus, select:focus {
+    outline: none;
+    border-color: var(--green-bright);
+    box-shadow: 0 0 0 3px rgba(74,124,74,0.12);
+  }
+  input[type="password"] { font-family: 'DM Mono', monospace; letter-spacing: 2px; }
+
+  .select-wrap { position: relative; }
+  .select-wrap::after {
+    content: '▾';
+    position: absolute;
+    right: 11px; top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-light);
+    pointer-events: none;
+    font-size: 12px;
+  }
+
+  .row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
+
+  /* Login type pills */
+  .login-types { display: flex; flex-wrap: wrap; gap: 8px; }
+  .login-btn {
+    padding: 8px 16px;
+    border: 1.5px solid var(--cream-dark);
+    border-radius: 20px;
+    background: #fff;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px; font-weight: 500;
+    color: var(--text-mid);
+    cursor: pointer;
+    transition: all 0.15s;
+    user-select: none;
+  }
+  .login-btn:hover { border-color: var(--green-bright); color: var(--green-dark); }
+  .login-btn.active {
+    background: var(--green-dark);
+    border-color: var(--green-dark);
+    color: var(--gold-light);
+  }
+
+  /* Time row */
+  .time-row { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 10px; }
+  .time-sep { font-size: 16px; color: var(--text-light); text-align: center; }
+
+  /* Player dots */
+  .player-select { display: flex; gap: 10px; }
+  .player-btn {
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    border: 1.5px solid var(--cream-dark);
+    background: #fff;
+    font-family: 'DM Mono', monospace;
+    font-size: 14px; font-weight: 500;
+    color: var(--text-mid);
+    cursor: pointer;
+    transition: all 0.15s;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .player-btn:hover { border-color: var(--green-bright); }
+  .player-btn.active { background: var(--green-dark); border-color: var(--green-dark); color: var(--gold-light); }
+
+  /* Tor toggle */
+  .tor-toggle { display: flex; align-items: center; gap: 10px; cursor: pointer; user-select: none; }
+  .toggle-track {
+    width: 38px; height: 21px;
+    background: var(--cream-dark);
+    border-radius: 11px;
+    position: relative;
+    transition: background 0.2s;
+    flex-shrink: 0;
+  }
+  .toggle-track.on { background: var(--green-bright); }
+  .toggle-thumb {
+    width: 15px; height: 15px;
+    background: #fff;
+    border-radius: 50%;
+    position: absolute;
+    top: 3px; left: 3px;
+    transition: transform 0.2s;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+  }
+  .toggle-track.on .toggle-thumb { transform: translateX(17px); }
+  .toggle-label { font-size: 13px; color: var(--text-mid); font-weight: 500; }
+  .toggle-sub { font-size: 11px; color: var(--text-light); }
+  .tor-fields { margin-top: 14px; display: none; }
+  .tor-fields.visible { display: block; }
+
+  /* Actions */
+  .actions {
+    padding: 22px 30px;
+    background: var(--green-dark);
+    display: flex; gap: 10px; align-items: center; flex-wrap: wrap;
+  }
+  .btn-primary {
+    flex: 1;
+    padding: 12px 22px;
+    background: var(--gold);
+    color: var(--green-dark);
+    border: none;
+    border-radius: var(--radius);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px; font-weight: 700;
+    cursor: pointer;
+    transition: background 0.15s, transform 0.1s;
+    white-space: nowrap;
+  }
+  .btn-primary:hover { background: var(--gold-light); transform: translateY(-1px); }
+  .btn-secondary {
+    padding: 12px 16px;
+    background: transparent;
+    color: var(--cream);
+    border: 1.5px solid rgba(245,240,232,0.25);
+    border-radius: var(--radius);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px; font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .btn-secondary:hover { border-color: var(--gold); color: var(--gold-light); }
+
+  /* Output */
+  .output-panel { display: none; max-width: 720px; margin: 0 auto 48px; }
+  .output-panel.visible { display: block; }
+  .output-card {
+    background: var(--green-dark);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    border: 1px solid rgba(201,168,76,0.2);
+  }
+  .output-header {
+    padding: 14px 22px;
+    display: flex; align-items: center; justify-content: space-between;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  .output-title { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--green-light); text-transform: uppercase; letter-spacing: 1.5px; }
+  .copy-btn {
+    padding: 5px 11px;
+    background: rgba(201,168,76,0.15);
+    color: var(--gold-light);
+    border: 1px solid rgba(201,168,76,0.3);
+    border-radius: 4px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .copy-btn:hover { background: rgba(201,168,76,0.28); }
+  .copy-btn.copied { color: var(--green-light); border-color: var(--green-light); }
+  .output-body {
+    padding: 18px 22px;
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    line-height: 1.9;
+    color: var(--cream);
+    white-space: pre;
+    overflow-x: auto;
+  }
+  .output-body .comment { color: #7ab87a; }
+  .output-body .key { color: var(--gold-light); }
+  .output-body .val { color: #c9a84c; }
+  .output-cmd { margin-top: 10px; background: rgba(0,0,0,0.3); border-radius: 8px; overflow: hidden; }
+  .cmd-header { padding: 9px 18px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.06); }
+  .cmd-label { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--text-light); letter-spacing: 1px; }
+  .cmd-body { padding: 13px 18px; font-family: 'DM Mono', monospace; font-size: 13px; color: var(--cream); }
+  .cmd-body .prompt { color: var(--green-light); margin-right: 8px; }
+
+  /* Helpers */
+  .hint { font-size: 11px; color: var(--text-light); margin-top: 3px; }
+  .badge {
+    display: inline-block;
+    padding: 2px 7px;
+    background: rgba(74,124,74,0.12);
+    color: var(--green-bright);
+    border-radius: 4px;
+    font-size: 10px;
+    font-family: 'DM Mono', monospace;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    vertical-align: middle;
+    margin-left: 5px;
+  }
+  .divider { height: 1px; background: var(--cream-dark); margin: 14px 0; }
+  .field-error { font-size: 11px; color: var(--error); margin-top: 3px; display: none; }
+  .field-error.visible { display: block; }
+  input.invalid, select.invalid { border-color: var(--error) !important; }
+
+  /* Info box */
+  .info-box {
+    padding: 11px 13px;
+    background: rgba(74,124,74,0.08);
+    border-radius: var(--radius);
+    border-left: 3px solid var(--green-bright);
+    font-size: 12px;
+    color: var(--text-mid);
+    line-height: 1.6;
+    margin-top: 12px;
+  }
+  .info-box code {
+    font-family: 'DM Mono', monospace;
+    background: var(--cream-dark);
+    padding: 1px 5px;
+    border-radius: 3px;
+  }
+
+  /* Prefilled badge */
+  .prefilled-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 2px 8px;
+    background: rgba(46,125,50,0.12);
+    color: var(--success, #2e7d32);
+    border-radius: 4px;
+    font-size: 10px;
+    font-family: 'DM Mono', monospace;
+    vertical-align: middle;
+    margin-left: 6px;
+  }
+  --success: #2e7d32;
+
+  @media (max-width: 580px) {
+    .section { padding: 20px 18px; }
+    .row-2, .row-3 { grid-template-columns: 1fr; }
+    .actions { padding: 18px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <span class="header-flag">⛳</span>
+  <h1>ForeUp <span>Tee Time</span> Monitor</h1>
+  <p>Bethpage State Park · Configuration</p>
+</div>
+
+<div class="card">
+
+  <!-- 01 Account -->
+  <div class="section">
+    <div class="section-label">01 · ForeUp Account</div>
+    <div class="row-2">
+      <div class="field">
+        <label for="username">Email / Username</label>
+        <input type="email" id="username" placeholder="you@example.com" autocomplete="username">
+        <div class="field-error" id="err-username">Please enter your email.</div>
+      </div>
+      <div class="field">
+        <label for="password">Password</label>
+        <input type="password" id="password" placeholder="••••••••" autocomplete="current-password">
+        <div class="field-error" id="err-password">Please enter your password.</div>
+      </div>
+    </div>
+    <div class="field" style="margin-top:14px;">
+      <label>Login Type <span class="badge">select one</span></label>
+      <div class="login-types" id="login-types"></div>
+      <div class="field-error" id="err-login-type">Please select a login type.</div>
+    </div>
+  </div>
+
+  <!-- 02 Course -->
+  <div class="section">
+    <div class="section-label">02 · Course / Facility</div>
+    <div class="field">
+      <label for="schedule">Course</label>
+      <div class="select-wrap">
+        <select id="schedule">
+          <option value="2432">Bethpage Black</option>
+          <option value="2433">Bethpage Red</option>
+          <option value="2434">Bethpage Blue</option>
+          <option value="2435">Bethpage Yellow</option>
+          <option value="2436">Bethpage Green</option>
+          <option value="2431">Bethpage (All Courses)</option>
+        </select>
+      </div>
+      <div class="field-error" id="err-schedule">Please select a course.</div>
+    </div>
+  </div>
+
+  <!-- 03 Date & Time -->
+  <div class="section">
+    <div class="section-label">03 · Date &amp; Time Window <span class="badge">EST</span></div>
+    <div class="row-2" style="margin-bottom:14px;">
+      <div class="field">
+        <label for="date-start">Watch From</label>
+        <input type="date" id="date-start">
+        <div class="hint">Blank = today</div>
+      </div>
+      <div class="field">
+        <label for="date-end">Watch Until</label>
+        <input type="date" id="date-end">
+        <div class="hint">Blank = next 7 days</div>
+      </div>
+    </div>
+    <div class="field">
+      <label>Time Window (EST)</label>
+      <div class="time-row">
+        <div>
+          <input type="text" id="time-start" placeholder="07:00" maxlength="7">
+        </div>
+        <div class="time-sep">→</div>
+        <div>
+          <input type="text" id="time-end" placeholder="11:30" maxlength="7">
+        </div>
+      </div>
+      <div class="hint">24-hr or 12-hr format (e.g. 07:00 or 7:00am)</div>
+      <div class="field-error" id="err-time">Please enter a valid time window.</div>
+    </div>
+  </div>
+
+  <!-- 04 Players & Holes -->
+  <div class="section">
+    <div class="section-label">04 · Players &amp; Holes</div>
+    <div class="row-2">
+      <div class="field">
+        <label>Minimum Players Needed</label>
+        <div class="player-select">
+          <button class="player-btn" data-players="1">1</button>
+          <button class="player-btn active" data-players="2">2</button>
+          <button class="player-btn" data-players="3">3</button>
+          <button class="player-btn" data-players="4">4</button>
+        </div>
+      </div>
+      <div class="field">
+        <label>Holes</label>
+        <div style="padding:9px 14px;background:var(--green-dark);color:var(--gold-light);border-radius:20px;font-size:13px;font-weight:600;font-family:'DM Mono',monospace;display:inline-block;margin-top:2px;">
+          Both (9 &amp; 18) ✓
+        </div>
+      </div>
+    </div>
+
+    <div class="field" style="margin-top:14px;">
+      <label>Check Interval <span class="badge">how often to poll</span></label>
+      <div class="select-wrap" style="max-width:260px;">
+        <select id="poll-interval">
+          <option value="3">3 seconds (fastest — Tor adds natural buffer)</option>
+          <option value="5">5 seconds (fast)</option>
+          <option value="10">10 seconds</option>
+          <option value="15">15 seconds</option>
+          <option value="30" selected>30 seconds (recommended)</option>
+          <option value="60">60 seconds</option>
+          <option value="120">2 minutes</option>
+        </select>
+      </div>
+      <div class="hint" id="interval-hint">Through Tor, 3s sleep = ~15-30s effective gap between requests on the server.</div>
+    </div>
+  </div>
+
+  <!-- 05 Notifications -->
+  <div class="section">
+    <div class="section-label">05 · Notifications</div>
+    <div class="row-2">
+      <div>
+        <div class="field">
+          <label for="smtp-user">
+            Sender Gmail
+            <span class="prefilled-badge">✓ pre-filled</span>
+          </label>
+          <input type="email" id="smtp-user" value="rezshark.bookings@gmail.com">
+        </div>
+        <div class="field">
+          <label for="smtp-pass">
+            App Password
+            <span class="prefilled-badge">✓ pre-filled</span>
+          </label>
+          <input type="password" id="smtp-pass" value="ssgj yuby ecyv avxz">
+        </div>
+      </div>
+      <div>
+        <div class="field">
+          <label for="notify-email">Send Alert To (email)</label>
+          <input type="email" id="notify-email" placeholder="your@email.com">
+        </div>
+        <div class="field">
+          <label for="notify-sms">SMS Gateway (optional)</label>
+          <input type="text" id="notify-sms" placeholder="5551234567@vtext.com">
+          <div class="hint">Verizon @vtext.com · AT&T @txt.att.net · T‑Mobile @tmomail.net</div>
+        </div>
+      </div>
+    </div>
+    <div class="info-box" style="margin-top:10px;">
+      ⚡ The monitor <strong>stops automatically</strong> after finding the first matching tee time and sending you the alert.
+    </div>
+  </div>
+
+  <!-- 06 Tor -->
+  <div class="section">
+    <div class="section-label">06 · Anonymity (Tor)</div>
+    <div class="tor-toggle" onclick="toggleTor()">
+      <div class="toggle-track on" id="tor-track"><div class="toggle-thumb"></div></div>
+      <div>
+        <div class="toggle-label">Route through Tor</div>
+        <div class="toggle-sub">Hides your real IP from ForeUp</div>
+      </div>
+    </div>
+    <div class="tor-fields visible" id="tor-fields">
+      <div class="divider"></div>
+      <div class="row-3">
+        <div class="field">
+          <label>SOCKS Host</label>
+          <input type="text" id="tor-host" value="127.0.0.1">
+        </div>
+        <div class="field">
+          <label>SOCKS Port</label>
+          <input type="text" id="tor-socks-port" value="9050">
+        </div>
+        <div class="field">
+          <label>Control Port</label>
+          <input type="text" id="tor-ctrl-port" value="9051">
+        </div>
+      </div>
+      <div class="field">
+        <label>Max Retries on Block</label>
+        <div class="select-wrap" style="max-width:180px;">
+          <select id="max-retries">
+            <option value="2">2</option>
+            <option value="3" selected>3</option>
+            <option value="5">5</option>
+          </select>
+        </div>
+      </div>
+      <div class="info-box">
+        First time? Run <code>bash setup_tor.sh</code> to install Tor and verify your IP is hidden before anything runs.
+      </div>
+    </div>
+  </div>
+
+  <!-- Actions -->
+  <div class="actions">
+    <button class="btn-primary" onclick="generate()">Generate .env &amp; Run Command →</button>
+    <button class="btn-secondary" onclick="resetForm()">Reset</button>
+  </div>
+</div>
+
+<!-- Output -->
+<div class="output-panel" id="output-panel">
+  <div class="output-card">
+    <div class="output-header">
+      <div class="output-title">.env — save this in your project folder</div>
+      <button class="copy-btn" id="copy-env" onclick="copyEnv()">Copy</button>
+    </div>
+    <div class="output-body" id="env-output"></div>
+  </div>
+  <div class="output-cmd">
+    <div class="cmd-header">
+      <div class="cmd-label">Run in terminal</div>
+      <button class="copy-btn" id="copy-cmd" onclick="copyCmd()">Copy</button>
+    </div>
+    <div class="cmd-body"><span class="prompt">$</span><span id="cmd-output"></span></div>
+  </div>
+</div>
+
+<script>
+// ── State ──────────────────────────────────────────────────────────────────────
+let selectedLoginType = 'Resident';
+let selectedPlayers   = 2;
+let torEnabled        = true;
+let envText           = '';
+
+const LOGIN_TYPES = [
+  'Resident', 'Non-Resident', 'Senior Resident', 'Junior', 'Member', 'Public'
+];
+
+const SCHEDULES = [
+  { id: '2432', name: 'Bethpage Black' },
+  { id: '2433', name: 'Bethpage Red' },
+  { id: '2434', name: 'Bethpage Blue' },
+  { id: '2435', name: 'Bethpage Yellow' },
+  { id: '2436', name: 'Bethpage Green' },
+  { id: '2431', name: 'Bethpage (All Courses)' },
+];
+
+// ── Init ──────────────────────────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  setDefaultDates();
+  renderLoginTypes();
+  document.getElementById('time-start').value = '07:00';
+  document.getElementById('time-end').value   = '11:30';
+
+  // Update hint when interval changes
+  document.getElementById('poll-interval').addEventListener('change', updateIntervalHint);
+});
+
+function setDefaultDates() {
+  const today = new Date();
+  const fmt   = d => d.toISOString().split('T')[0];
+  document.getElementById('date-start').value = fmt(today);
+  const end = new Date(today); end.setDate(end.getDate() + 7);
+  document.getElementById('date-end').value = fmt(end);
+}
+
+function updateIntervalHint() {
+  const v    = parseInt(document.getElementById('poll-interval').value);
+  const hint = document.getElementById('interval-hint');
+  if (v <= 5) {
+    hint.textContent = `Through Tor, ${v}s sleep ≈ 15-30s effective gap on the server — safe to use.`;
+    hint.style.color = 'var(--green-bright)';
+  } else {
+    hint.textContent = `Checks every ${v} seconds. Recommended for non-Tor use.`;
+    hint.style.color = 'var(--text-light)';
+  }
+}
+
+// ── Login types ───────────────────────────────────────────────────────────────
+function renderLoginTypes() {
+  const c = document.getElementById('login-types');
+  c.innerHTML = '';
+  LOGIN_TYPES.forEach(lt => {
+    const btn = document.createElement('button');
+    btn.className = 'login-btn' + (lt === selectedLoginType ? ' active' : '');
+    btn.textContent = lt;
+    btn.onclick = () => {
+      selectedLoginType = lt;
+      document.querySelectorAll('.login-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    };
+    c.appendChild(btn);
+  });
+}
+
+// ── Player buttons ────────────────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.player-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      selectedPlayers = parseInt(btn.dataset.players);
+      document.querySelectorAll('.player-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    });
+  });
+});
+
+// ── Tor toggle ────────────────────────────────────────────────────────────────
+function toggleTor() {
+  torEnabled = !torEnabled;
+  document.getElementById('tor-track').classList.toggle('on', torEnabled);
+  document.getElementById('tor-fields').classList.toggle('visible', torEnabled);
+}
+
+// ── Time parsing ──────────────────────────────────────────────────────────────
+function parseTime(str) {
+  str = str.trim().toLowerCase();
+  let m = str.match(/^(\d{1,2}):(\d{2})$/);
+  if (m) return `${m[1].padStart(2,'0')}:${m[2]}`;
+  m = str.match(/^(\d{1,2})(am|pm)$/);
+  if (m) {
+    let h = parseInt(m[1]);
+    if (m[2] === 'pm' && h < 12) h += 12;
+    if (m[2] === 'am' && h === 12) h = 0;
+    return `${String(h).padStart(2,'0')}:00`;
+  }
+  m = str.match(/^(\d{1,2}):(\d{2})(am|pm)$/);
+  if (m) {
+    let h = parseInt(m[1]);
+    if (m[3] === 'pm' && h < 12) h += 12;
+    if (m[3] === 'am' && h === 12) h = 0;
+    return `${String(h).padStart(2,'0')}:${m[2]}`;
+  }
+  return null;
+}
+
+// ── Validation ────────────────────────────────────────────────────────────────
+function validate() {
+  let ok = true;
+  ['username','password'].forEach(id => {
+    document.getElementById('err-'+id).classList.remove('visible');
+    document.getElementById(id).classList.remove('invalid');
+    if (!document.getElementById(id).value.trim()) {
+      document.getElementById('err-'+id).classList.add('visible');
+      document.getElementById(id).classList.add('invalid');
+      ok = false;
+    }
+  });
+  document.getElementById('err-login-type').classList.remove('visible');
+  if (!selectedLoginType) { document.getElementById('err-login-type').classList.add('visible'); ok = false; }
+
+  document.getElementById('err-time').classList.remove('visible');
+  ['time-start','time-end'].forEach(id => document.getElementById(id).classList.remove('invalid'));
+  const ts = parseTime(document.getElementById('time-start').value);
+  const te = parseTime(document.getElementById('time-end').value);
+  if (!ts || !te || ts >= te) {
+    document.getElementById('err-time').textContent = ts && te && ts >= te
+      ? 'End time must be after start time.' : 'Enter times e.g. 07:00 and 11:30';
+    document.getElementById('err-time').classList.add('visible');
+    ['time-start','time-end'].forEach(id => document.getElementById(id).classList.add('invalid'));
+    ok = false;
+  }
+  return ok;
+}
+
+// ── Generate ──────────────────────────────────────────────────────────────────
+function generate() {
+  if (!validate()) return;
+
+  const u        = document.getElementById('username').value.trim();
+  const p        = document.getElementById('password').value.trim();
+  const sched    = document.getElementById('schedule').value;
+  const schedObj = SCHEDULES.find(s => s.id === sched) || { name: sched };
+  const ts       = parseTime(document.getElementById('time-start').value);
+  const te       = parseTime(document.getElementById('time-end').value);
+  const ds       = document.getElementById('date-start').value;
+  const de       = document.getElementById('date-end').value;
+  const poll     = document.getElementById('poll-interval').value;
+  const smtpUser = document.getElementById('smtp-user').value.trim();
+  const smtpPass = document.getElementById('smtp-pass').value.trim();
+  const nEmail   = document.getElementById('notify-email').value.trim();
+  const nSMS     = document.getElementById('notify-sms').value.trim();
+  const torHost  = document.getElementById('tor-host').value.trim();
+  const torSocks = document.getElementById('tor-socks-port').value.trim();
+  const torCtrl  = document.getElementById('tor-ctrl-port').value.trim();
+  const maxRetry = document.getElementById('max-retries').value;
+
+  // Build date range string
+  let watchDates = '';
+  if (ds && de) {
+    const dates = [];
+    let cur = new Date(ds + 'T00:00:00');
+    const end = new Date(de + 'T00:00:00');
+    while (cur <= end) { dates.push(cur.toISOString().split('T')[0]); cur.setDate(cur.getDate()+1); }
+    watchDates = dates.join(',');
+  }
+
+  const lines = [
+    `# ── Generated by ForeUp Monitor Setup ───────────────────────────`,
+    `# Course: ${schedObj.name}  (Schedule ID: ${sched})`,
+    `# Stops automatically after first match is found.`,
+    ``,
+    `# ── ForeUp Login ─────────────────────────────────────────────────`,
+    `FOREUP_USERNAME=${u}`,
+    `FOREUP_PASSWORD=${p}`,
+    `LOGIN_TYPE=${selectedLoginType}`,
+    `FACILITY_ID=19765`,
+    `SCHEDULE_ID=${sched}`,
+    ``,
+    `# ── Dates (YYYY-MM-DD, comma-separated) ──────────────────────────`,
+    watchDates ? `WATCH_DATES=${watchDates}` : `# WATCH_DATES=  (will watch next 7 days from today)`,
+    ``,
+    `# ── Time Window (EST, 24-hr) ─────────────────────────────────────`,
+    `WINDOW_START=${ts}`,
+    `WINDOW_END=${te}`,
+    ``,
+    `# ── Players & Holes ─────────────────────────────────────────────`,
+    `MIN_PLAYERS=${selectedPlayers}`,
+    `HOLES=all`,
+    ``,
+    `# ── Polling (seconds between checks) ────────────────────────────`,
+    `POLL_INTERVAL=${poll}`,
+    ``,
+    `# ── Gmail Notifications ─────────────────────────────────────────`,
+    `SMTP_HOST=smtp.gmail.com`,
+    `SMTP_PORT=587`,
+    `SMTP_USER=${smtpUser}`,
+    `SMTP_PASSWORD=${smtpPass}`,
+    `NOTIFY_EMAIL=${nEmail}`,
+    `NOTIFY_SMS=${nSMS}`,
+    ``,
+    `# ── Tor Anonymity ───────────────────────────────────────────────`,
+    `TOR_ENABLED=${torEnabled ? '1' : '0'}`,
+    ...(torEnabled ? [
+      `TOR_SOCKS_HOST=${torHost}`,
+      `TOR_SOCKS_PORT=${torSocks}`,
+      `TOR_CONTROL_PORT=${torCtrl}`,
+      `TOR_CONTROL_PASS=`,
+      `MAX_RETRIES=${maxRetry}`,
+    ] : []),
+  ];
+  envText = lines.join('\n');
+
+  // Syntax-highlight env
+  const highlighted = envText.split('\n').map(line => {
+    if (line.startsWith('#')) return `<span class="comment">${esc(line)}</span>`;
+    const eq = line.indexOf('=');
+    if (eq > 0) {
+      const k = line.slice(0, eq);
+      const v = line.slice(eq + 1);
+      return `<span class="key">${esc(k)}</span>=<span class="val">${esc(v)}</span>`;
+    }
+    return esc(line);
+  }).join('\n');
+
+  document.getElementById('env-output').innerHTML = highlighted;
+  document.getElementById('cmd-output').textContent = torEnabled
+    ? 'bash setup_tor.sh && python foreup_monitor.py'
+    : 'python foreup_monitor.py';
+
+  document.getElementById('output-panel').classList.add('visible');
+  setTimeout(() => document.getElementById('output-panel').scrollIntoView({ behavior: 'smooth', block: 'start' }), 50);
+}
+
+function esc(s) {
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function copyEnv() {
+  navigator.clipboard.writeText(envText).then(() => flashCopy('copy-env'));
+}
+function copyCmd() {
+  navigator.clipboard.writeText(document.getElementById('cmd-output').textContent).then(() => flashCopy('copy-cmd'));
+}
+function flashCopy(id) {
+  const btn = document.getElementById(id);
+  btn.textContent = 'Copied!'; btn.classList.add('copied');
+  setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 1800);
+}
+
+function resetForm() {
+  document.querySelectorAll('input[type="email"], input[type="text"], input[type="number"]').forEach(i => {
+    if (!['smtp-user','smtp-pass'].includes(i.id)) i.value = '';
+  });
+  document.getElementById('password').value = '';
+  selectedLoginType = 'Resident';
+  selectedPlayers   = 2;
+  renderLoginTypes();
+  document.querySelectorAll('.player-btn').forEach(b => b.classList.toggle('active', b.dataset.players === '2'));
+  setDefaultDates();
+  document.getElementById('time-start').value = '07:00';
+  document.getElementById('time-end').value   = '11:30';
+  document.getElementById('poll-interval').value = '30';
+  document.getElementById('output-panel').classList.remove('visible');
+  ['username','password','login-type','time'].forEach(id => {
+    const el = document.getElementById('err-'+id);
+    if (el) el.classList.remove('visible');
+  });
+}
+</script>
+</body>
+</html>
