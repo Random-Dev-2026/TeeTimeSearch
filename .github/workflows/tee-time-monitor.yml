@@ -1,49 +1,86 @@
 name: Tee Time Monitor
 
 on:
-  schedule:
-    # Runs every 5 minutes (GitHub Actions minimum interval)
-    # Note: GitHub may delay runs by a few minutes during high load
-    - cron: '*/5 * * * *'
-
-  # Lets you trigger a manual run from the GitHub Actions tab
+  # Triggered from the GUI via GitHub API — all inputs passed from the web form
   workflow_dispatch:
+    inputs:
+      foreup_username:
+        description: "ForeUp email / username"
+        required: true
+      foreup_password:
+        description: "ForeUp password"
+        required: true
+      login_type:
+        description: "Login type (e.g. Resident, Non-Resident, Member)"
+        required: true
+        default: "Resident"
+      schedule_id:
+        description: "Course schedule ID (2432=Black, 2433=Red, 2434=Blue, 2435=Yellow, 2436=Green)"
+        required: true
+        default: "2432"
+      window_start:
+        description: "Earliest tee time (EST, 24hr format e.g. 07:00)"
+        required: true
+        default: "07:00"
+      window_end:
+        description: "Latest tee time (EST, 24hr format e.g. 11:30)"
+        required: true
+        default: "11:30"
+      min_players:
+        description: "Minimum open spots required (1-4)"
+        required: true
+        default: "1"
+      watch_dates:
+        description: "Dates to watch (YYYY-MM-DD comma-separated, blank = next 7 days)"
+        required: false
+        default: ""
+      notify_email:
+        description: "Email address to send alerts to"
+        required: false
+        default: ""
+      notify_sms:
+        description: "SMS gateway address (e.g. 5551234567@vtext.com)"
+        required: false
+        default: ""
+      poll_interval:
+        description: "Seconds between checks (minimum 15)"
+        required: true
+        default: "30"
 
 jobs:
-  check-tee-times:
+  monitor:
     runs-on: ubuntu-latest
+    # GitHub Actions free tier has a 6-hour job limit; our script self-limits to 2 hours
+    timeout-minutes: 125
 
     steps:
       - name: Check out repo
         uses: actions/checkout@v4
 
-      - name: Set up Python
+      - name: Set up Python 3.12
         uses: actions/setup-python@v5
         with:
-          python-version: '3.12'
+          python-version: "3.12"
 
       - name: Install dependencies
-        run: pip install requests python-dotenv
+        run: pip install requests
 
       - name: Run tee time monitor
         env:
-          # ── ForeUp login ──────────────────────────────────────────────────
-          FOREUP_USERNAME:  ${{ secrets.FOREUP_USERNAME }}
-          FOREUP_PASSWORD:  ${{ secrets.FOREUP_PASSWORD }}
-          LOGIN_TYPE:       ${{ secrets.LOGIN_TYPE }}
-          SCHEDULE_ID:      ${{ secrets.SCHEDULE_ID }}
+          # From workflow inputs (passed by the GUI)
+          FOREUP_USERNAME:  ${{ github.event.inputs.foreup_username }}
+          FOREUP_PASSWORD:  ${{ github.event.inputs.foreup_password }}
+          LOGIN_TYPE:       ${{ github.event.inputs.login_type }}
+          SCHEDULE_ID:      ${{ github.event.inputs.schedule_id }}
+          WINDOW_START:     ${{ github.event.inputs.window_start }}
+          WINDOW_END:       ${{ github.event.inputs.window_end }}
+          MIN_PLAYERS:      ${{ github.event.inputs.min_players }}
+          WATCH_DATES:      ${{ github.event.inputs.watch_dates }}
+          NOTIFY_EMAIL:     ${{ github.event.inputs.notify_email }}
+          NOTIFY_SMS:       ${{ github.event.inputs.notify_sms }}
+          POLL_INTERVAL:    ${{ github.event.inputs.poll_interval }}
 
-          # ── Time window ───────────────────────────────────────────────────
-          WINDOW_START:     ${{ secrets.WINDOW_START }}
-          WINDOW_END:       ${{ secrets.WINDOW_END }}
-          MIN_PLAYERS:      ${{ secrets.MIN_PLAYERS }}
-
-          # ── Dates (optional — blank = next 7 days) ────────────────────────
-          WATCH_DATES:      ${{ secrets.WATCH_DATES }}
-
-          # ── Notifications ─────────────────────────────────────────────────
+          # Gmail password — only secret needed, stored in repo Settings → Secrets
           GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
-          NOTIFY_EMAIL:     ${{ secrets.NOTIFY_EMAIL }}
-          NOTIFY_SMS:       ${{ secrets.NOTIFY_SMS }}
 
         run: python foreup_monitor_actions.py
