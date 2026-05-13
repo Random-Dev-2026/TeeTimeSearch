@@ -451,34 +451,14 @@
   <!-- 05 Notifications -->
   <div class="section">
     <div class="section-label">05 · Notifications</div>
-    <div class="row-2">
-      <div>
-        <div class="field">
-          <label for="smtp-user">
-            Sender Gmail
-            <span class="prefilled-badge">✓ pre-filled</span>
-          </label>
-          <input type="email" id="smtp-user" value="rezshark.bookings@gmail.com">
-        </div>
-        <div class="field">
-          <label for="smtp-pass">
-            App Password
-            <span class="prefilled-badge">✓ pre-filled</span>
-          </label>
-          <input type="password" id="smtp-pass" value="ssgj yuby ecyv avxz">
-        </div>
-      </div>
-      <div>
-        <div class="field">
-          <label for="notify-email">Send Alert To (email)</label>
-          <input type="email" id="notify-email" placeholder="your@email.com">
-        </div>
-        <div class="field">
-          <label for="notify-sms">SMS Gateway (optional)</label>
-          <input type="text" id="notify-sms" placeholder="5551234567@vtext.com">
-          <div class="hint">Verizon @vtext.com · AT&T @txt.att.net · T‑Mobile @tmomail.net</div>
-        </div>
-      </div>
+    <div class="field">
+      <label for="notify-email">Send Alert To (email)</label>
+      <input type="email" id="notify-email" placeholder="your@email.com">
+    </div>
+    <div class="field">
+      <label for="notify-sms">SMS Gateway (optional)</label>
+      <input type="text" id="notify-sms" placeholder="5551234567@vtext.com">
+      <div class="hint">Verizon @vtext.com · AT&amp;T @txt.att.net · T‑Mobile @tmomail.net</div>
     </div>
     <div class="info-box" style="margin-top:10px;">
       ⚡ The monitor <strong>stops automatically</strong> after finding the first matching tee time and sending you the alert.
@@ -491,64 +471,52 @@
     <div class="tor-toggle" onclick="toggleTor()">
       <div class="toggle-track on" id="tor-track"><div class="toggle-thumb"></div></div>
       <div>
-        <div class="toggle-label">Route through Tor</div>
-        <div class="toggle-sub">Hides your real IP from ForeUp</div>
+        <div class="toggle-label">Hide IP Address (Tor)</div>
+        <div class="toggle-sub">Routes traffic through Tor — hides your real IP from ForeUp</div>
       </div>
     </div>
-    <div class="tor-fields visible" id="tor-fields">
-      <div class="divider"></div>
-      <div class="row-3">
-        <div class="field">
-          <label>SOCKS Host</label>
-          <input type="text" id="tor-host" value="127.0.0.1">
-        </div>
-        <div class="field">
-          <label>SOCKS Port</label>
-          <input type="text" id="tor-socks-port" value="9050">
-        </div>
-        <div class="field">
-          <label>Control Port</label>
-          <input type="text" id="tor-ctrl-port" value="9051">
-        </div>
-      </div>
-      <div class="field">
-        <label>Max Retries on Block</label>
-        <div class="select-wrap" style="max-width:180px;">
-          <select id="max-retries">
-            <option value="2">2</option>
-            <option value="3" selected>3</option>
-            <option value="5">5</option>
-          </select>
-        </div>
-      </div>
-      <div class="info-box">
-        First time? Run <code>bash setup_tor.sh</code> to install Tor and verify your IP is hidden before anything runs.
-      </div>
+    <!-- Hidden fields still present so buildEnv() can read them -->
+    <div id="tor-fields" style="display:none;">
+      <input type="hidden" id="tor-host" value="127.0.0.1">
+      <input type="hidden" id="tor-socks-port" value="9050">
+      <input type="hidden" id="tor-ctrl-port" value="9051">
+      <select id="max-retries" style="display:none;">
+        <option value="3" selected>3</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- 07 GitHub -->
+  <div class="section">
+    <div class="section-label">07 · GitHub Connection</div>
+    <div class="field">
+      <label for="gh-token">Personal Access Token <span class="badge">used to trigger the monitor</span></label>
+      <input type="password" id="gh-token" placeholder="github_pat_…" autocomplete="off">
+      <div class="hint">Fine-grained PAT with <strong>Actions: Read &amp; Write</strong> permission on your TeeTimeSearch repo. <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" style="color:var(--green-bright);">Create one here ↗</a></div>
+      <div class="field-error" id="err-gh-token">Please enter your GitHub token.</div>
+    </div>
+    <div class="field">
+      <label for="gh-owner">GitHub Username</label>
+      <input type="text" id="gh-owner" placeholder="jasonsharkey">
+      <div class="field-error" id="err-gh-owner">Please enter your GitHub username.</div>
     </div>
   </div>
 
   <!-- Actions -->
   <div class="actions">
-    <button class="btn-primary" onclick="generate()">Generate .env &amp; Run Command →</button>
+    <button class="btn-primary" id="run-btn" onclick="triggerWorkflow()">⛳ Start Monitor →</button>
     <button class="btn-secondary" onclick="resetForm()">Reset</button>
   </div>
 </div>
 
-<!-- Output -->
+<!-- Status panel -->
 <div class="output-panel" id="output-panel">
   <div class="output-card">
     <div class="output-header">
-      <div class="output-title">.env — save this in your project folder</div>
-      <button class="copy-btn" id="copy-env" onclick="copyEnv()">Copy</button>
+      <div class="output-title" id="status-title">Monitor Status</div>
+      <div id="status-badge" style="font-family:'DM Mono',monospace;font-size:11px;padding:3px 10px;border-radius:4px;"></div>
     </div>
-    <div class="output-body" id="env-output"></div>
-  </div>
-  <div class="output-cmd">
-    <div class="cmd-header">
-      <div class="cmd-label">Run in terminal</div>
-      <button class="copy-btn" id="copy-cmd" onclick="copyCmd()">Copy</button>
-    </div>
-    <div class="cmd-body"><span class="prompt">$</span><span id="cmd-output"></span></div>
+    <div class="output-body" id="status-body" style="white-space:pre-wrap;line-height:1.7;"></div>
   </div>
 </div>
 
@@ -557,7 +525,10 @@
 let selectedLoginType = 'Resident';
 let selectedPlayers   = 2;
 let torEnabled        = true;
-let envText           = '';
+let envText           = '';  // kept for compatibility
+
+const GH_REPO = 'TeeTimeSearch';
+const WORKFLOW_FILE = 'tee-time-monitor.yml';
 
 const LOGIN_TYPES = [
   'Resident', 'Non-Resident', 'Senior Resident', 'Junior', 'Member', 'Public'
@@ -635,7 +606,7 @@ document.addEventListener('DOMContentLoaded', () => {
 function toggleTor() {
   torEnabled = !torEnabled;
   document.getElementById('tor-track').classList.toggle('on', torEnabled);
-  document.getElementById('tor-fields').classList.toggle('visible', torEnabled);
+  // tor-fields is always hidden from view; only the toggle state matters
 }
 
 // ── Time parsing ──────────────────────────────────────────────────────────────
@@ -689,27 +660,41 @@ function validate() {
   return ok;
 }
 
-// ── Generate ──────────────────────────────────────────────────────────────────
-function generate() {
+// ── Trigger GitHub Actions workflow ──────────────────────────────────────────
+async function triggerWorkflow() {
   if (!validate()) return;
 
-  const u        = document.getElementById('username').value.trim();
-  const p        = document.getElementById('password').value.trim();
-  const sched    = document.getElementById('schedule').value;
-  const schedObj = SCHEDULES.find(s => s.id === sched) || { name: sched };
-  const ts       = parseTime(document.getElementById('time-start').value);
-  const te       = parseTime(document.getElementById('time-end').value);
-  const ds       = document.getElementById('date-start').value;
-  const de       = document.getElementById('date-end').value;
-  const poll     = document.getElementById('poll-interval').value;
-  const smtpUser = document.getElementById('smtp-user').value.trim();
-  const smtpPass = document.getElementById('smtp-pass').value.trim();
-  const nEmail   = document.getElementById('notify-email').value.trim();
-  const nSMS     = document.getElementById('notify-sms').value.trim();
-  const torHost  = document.getElementById('tor-host').value.trim();
-  const torSocks = document.getElementById('tor-socks-port').value.trim();
-  const torCtrl  = document.getElementById('tor-ctrl-port').value.trim();
-  const maxRetry = document.getElementById('max-retries').value;
+  const ghToken = document.getElementById('gh-token').value.trim();
+  const ghOwner = document.getElementById('gh-owner').value.trim();
+
+  // Validate GitHub fields
+  let ghOk = true;
+  ['gh-token','gh-owner'].forEach(id => {
+    document.getElementById('err-' + id).classList.remove('visible');
+    document.getElementById(id).classList.remove('invalid');
+  });
+  if (!ghToken) {
+    document.getElementById('err-gh-token').classList.add('visible');
+    document.getElementById('gh-token').classList.add('invalid');
+    ghOk = false;
+  }
+  if (!ghOwner) {
+    document.getElementById('err-gh-owner').classList.add('visible');
+    document.getElementById('gh-owner').classList.add('invalid');
+    ghOk = false;
+  }
+  if (!ghOk) return;
+
+  const u      = document.getElementById('username').value.trim();
+  const p      = document.getElementById('password').value.trim();
+  const sched  = document.getElementById('schedule').value;
+  const ts     = parseTime(document.getElementById('time-start').value);
+  const te     = parseTime(document.getElementById('time-end').value);
+  const ds     = document.getElementById('date-start').value;
+  const de     = document.getElementById('date-end').value;
+  const poll   = document.getElementById('poll-interval').value;
+  const nEmail = document.getElementById('notify-email').value.trim();
+  const nSMS   = document.getElementById('notify-sms').value.trim();
 
   // Build date range string
   let watchDates = '';
@@ -721,83 +706,145 @@ function generate() {
     watchDates = dates.join(',');
   }
 
-  const lines = [
-    `# ── Generated by ForeUp Monitor Setup ───────────────────────────`,
-    `# Course: ${schedObj.name}  (Schedule ID: ${sched})`,
-    `# Stops automatically after first match is found.`,
-    ``,
-    `# ── ForeUp Login ─────────────────────────────────────────────────`,
-    `FOREUP_USERNAME=${u}`,
-    `FOREUP_PASSWORD=${p}`,
-    `LOGIN_TYPE=${selectedLoginType}`,
-    `FACILITY_ID=19765`,
-    `SCHEDULE_ID=${sched}`,
-    ``,
-    `# ── Dates (YYYY-MM-DD, comma-separated) ──────────────────────────`,
-    watchDates ? `WATCH_DATES=${watchDates}` : `# WATCH_DATES=  (will watch next 7 days from today)`,
-    ``,
-    `# ── Time Window (EST, 24-hr) ─────────────────────────────────────`,
-    `WINDOW_START=${ts}`,
-    `WINDOW_END=${te}`,
-    ``,
-    `# ── Players & Holes ─────────────────────────────────────────────`,
-    `MIN_PLAYERS=${selectedPlayers}`,
-    `HOLES=all`,
-    ``,
-    `# ── Polling (seconds between checks) ────────────────────────────`,
-    `POLL_INTERVAL=${poll}`,
-    ``,
-    `# ── Gmail Notifications ─────────────────────────────────────────`,
-    `SMTP_HOST=smtp.gmail.com`,
-    `SMTP_PORT=587`,
-    `SMTP_USER=${smtpUser}`,
-    `SMTP_PASSWORD=${smtpPass}`,
-    `NOTIFY_EMAIL=${nEmail}`,
-    `NOTIFY_SMS=${nSMS}`,
-    ``,
-    `# ── Tor Anonymity ───────────────────────────────────────────────`,
-    `TOR_ENABLED=${torEnabled ? '1' : '0'}`,
-    ...(torEnabled ? [
-      `TOR_SOCKS_HOST=${torHost}`,
-      `TOR_SOCKS_PORT=${torSocks}`,
-      `TOR_CONTROL_PORT=${torCtrl}`,
-      `TOR_CONTROL_PASS=`,
-      `MAX_RETRIES=${maxRetry}`,
-    ] : []),
-  ];
-  envText = lines.join('\n');
+  // Show loading state
+  const btn = document.getElementById('run-btn');
+  btn.textContent = '⏳ Launching…';
+  btn.disabled = true;
+  showStatus('launching', '🚀 Connecting to GitHub Actions…', '');
 
-  // Syntax-highlight env
-  const highlighted = envText.split('\n').map(line => {
-    if (line.startsWith('#')) return `<span class="comment">${esc(line)}</span>`;
-    const eq = line.indexOf('=');
-    if (eq > 0) {
-      const k = line.slice(0, eq);
-      const v = line.slice(eq + 1);
-      return `<span class="key">${esc(k)}</span>=<span class="val">${esc(v)}</span>`;
+  // Build the workflow_dispatch API payload
+  const payload = {
+    ref: 'main',
+    inputs: {
+      foreup_username: u,
+      foreup_password: p,
+      login_type:      selectedLoginType,
+      schedule_id:     sched,
+      window_start:    ts,
+      window_end:      te,
+      min_players:     String(selectedPlayers),
+      watch_dates:     watchDates,
+      notify_email:    nEmail,
+      notify_sms:      nSMS,
+      poll_interval:   poll,
     }
-    return esc(line);
-  }).join('\n');
+  };
 
-  document.getElementById('env-output').innerHTML = highlighted;
-  document.getElementById('cmd-output').textContent = torEnabled
-    ? 'bash setup_tor.sh && python foreup_monitor.py'
-    : 'python foreup_monitor.py';
+  const apiUrl = `https://api.github.com/repos/${ghOwner}/${GH_REPO}/actions/workflows/${WORKFLOW_FILE}/dispatches`;
 
-  document.getElementById('output-panel').classList.add('visible');
-  setTimeout(() => document.getElementById('output-panel').scrollIntoView({ behavior: 'smooth', block: 'start' }), 50);
+  try {
+    const resp = await fetch(apiUrl, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${ghToken}`,
+        'Accept':        'application/vnd.github+json',
+        'Content-Type':  'application/json',
+        'X-GitHub-Api-Version': '2022-11-28',
+      },
+      body: JSON.stringify(payload),
+    });
+
+    if (resp.status === 204) {
+      // Success — 204 No Content is GitHub's success response for dispatch
+      const schedObj = SCHEDULES.find(s => s.id === sched) || { name: sched };
+      const dateDesc = watchDates
+        ? watchDates.split(',').slice(0,3).join(', ') + (watchDates.split(',').length > 3 ? '…' : '')
+        : 'next 7 days';
+      const runsUrl = `https://github.com/${ghOwner}/${GH_REPO}/actions`;
+
+      showStatus('success', '✅ Monitor is running!',
+        `Course:       ${schedObj.name}
+` +
+        `Time window:  ${ts} – ${te} EST
+` +
+        `Players:      ${selectedPlayers}+
+` +
+        `Dates:        ${dateDesc}
+` +
+        `Polling:      every ${poll}s (up to 2 hours)
+
+` +
+        `You'll receive a notification when a tee time is found,
+` +
+        `or after 2 hours if nothing opens up.
+
+` +
+        `Watch live: ${runsUrl}`
+      );
+      btn.textContent = '⛳ Start Monitor →';
+      btn.disabled = false;
+
+    } else if (resp.status === 401) {
+      showStatus('error', '❌ Authentication failed',
+        'Your GitHub token is invalid or expired.
+Create a new one at github.com/settings/personal-access-tokens/new
+Make sure it has Actions: Read & Write on the TeeTimeSearch repo.');
+      btn.textContent = '⛳ Start Monitor →';
+      btn.disabled = false;
+
+    } else if (resp.status === 404) {
+      showStatus('error', '❌ Workflow not found',
+        `Could not find the workflow at:
+${apiUrl}
+
+Check that:
+• Your username is correct (you entered: ${ghOwner})
+• The file .github/workflows/tee-time-monitor.yml is in your repo
+• The repo name is exactly: ${GH_REPO}`);
+      btn.textContent = '⛳ Start Monitor →';
+      btn.disabled = false;
+
+    } else if (resp.status === 422) {
+      showStatus('error', '❌ Validation error',
+        'GitHub rejected the request. Make sure the workflow file has been committed to the main branch.');
+      btn.textContent = '⛳ Start Monitor →';
+      btn.disabled = false;
+
+    } else {
+      const text = await resp.text();
+      showStatus('error', `❌ Unexpected error (HTTP ${resp.status})`, text.slice(0, 300));
+      btn.textContent = '⛳ Start Monitor →';
+      btn.disabled = false;
+    }
+
+  } catch (err) {
+    showStatus('error', '❌ Network error', `Could not reach GitHub API.
+${err.message}`);
+    btn.textContent = '⛳ Start Monitor →';
+    btn.disabled = false;
+  }
 }
 
+function showStatus(type, title, body) {
+  const panel = document.getElementById('output-panel');
+  const titleEl = document.getElementById('status-title');
+  const badge   = document.getElementById('status-badge');
+  const bodyEl  = document.getElementById('status-body');
+
+  const colors = {
+    launching: { bg: 'rgba(201,168,76,0.15)', color: '#c9a84c',  border: 'rgba(201,168,76,0.4)' },
+    success:   { bg: 'rgba(74,124,74,0.15)',  color: '#7ab87a',  border: 'rgba(74,124,74,0.4)'  },
+    error:     { bg: 'rgba(192,57,43,0.12)',  color: '#e07070',  border: 'rgba(192,57,43,0.4)'  },
+  };
+  const c = colors[type] || colors.launching;
+
+  badge.textContent = type.toUpperCase();
+  badge.style.cssText = `background:${c.bg};color:${c.color};border:1px solid ${c.border};font-family:'DM Mono',monospace;font-size:11px;padding:3px 10px;border-radius:4px;`;
+  titleEl.textContent = title;
+  bodyEl.textContent  = body;
+  panel.classList.add('visible');
+  setTimeout(() => panel.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50);
+}
+
+// ── Legacy (kept so resetForm still compiles) ─────────────────────────────────
+function generate() { triggerWorkflow(); }
+function copyEnv()  {}
+function copyCmd()  {}
 function esc(s) {
   return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 }
 
-function copyEnv() {
-  navigator.clipboard.writeText(envText).then(() => flashCopy('copy-env'));
-}
-function copyCmd() {
-  navigator.clipboard.writeText(document.getElementById('cmd-output').textContent).then(() => flashCopy('copy-cmd'));
-}
+// copyEnv/copyCmd replaced by triggerWorkflow
 function flashCopy(id) {
   const btn = document.getElementById(id);
   btn.textContent = 'Copied!'; btn.classList.add('copied');
@@ -818,10 +865,11 @@ function resetForm() {
   document.getElementById('time-end').value   = '11:30';
   document.getElementById('poll-interval').value = '30';
   document.getElementById('output-panel').classList.remove('visible');
-  ['username','password','login-type','time'].forEach(id => {
+  ['username','password','login-type','time','gh-token','gh-owner'].forEach(id => {
     const el = document.getElementById('err-'+id);
     if (el) el.classList.remove('visible');
   });
+  document.getElementById('output-panel').classList.remove('visible');
 }
 </script>
 </body>
