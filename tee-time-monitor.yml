@@ -1,0 +1,49 @@
+name: Tee Time Monitor
+
+on:
+  schedule:
+    # Runs every 5 minutes (GitHub Actions minimum interval)
+    # Note: GitHub may delay runs by a few minutes during high load
+    - cron: '*/5 * * * *'
+
+  # Lets you trigger a manual run from the GitHub Actions tab
+  workflow_dispatch:
+
+jobs:
+  check-tee-times:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: pip install requests python-dotenv
+
+      - name: Run tee time monitor
+        env:
+          # ── ForeUp login ──────────────────────────────────────────────────
+          FOREUP_USERNAME:  ${{ secrets.FOREUP_USERNAME }}
+          FOREUP_PASSWORD:  ${{ secrets.FOREUP_PASSWORD }}
+          LOGIN_TYPE:       ${{ secrets.LOGIN_TYPE }}
+          SCHEDULE_ID:      ${{ secrets.SCHEDULE_ID }}
+
+          # ── Time window ───────────────────────────────────────────────────
+          WINDOW_START:     ${{ secrets.WINDOW_START }}
+          WINDOW_END:       ${{ secrets.WINDOW_END }}
+          MIN_PLAYERS:      ${{ secrets.MIN_PLAYERS }}
+
+          # ── Dates (optional — blank = next 7 days) ────────────────────────
+          WATCH_DATES:      ${{ secrets.WATCH_DATES }}
+
+          # ── Notifications ─────────────────────────────────────────────────
+          GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
+          NOTIFY_EMAIL:     ${{ secrets.NOTIFY_EMAIL }}
+          NOTIFY_SMS:       ${{ secrets.NOTIFY_SMS }}
+
+        run: python foreup_monitor_actions.py
