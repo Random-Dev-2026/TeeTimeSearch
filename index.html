@@ -221,8 +221,8 @@
   .btn-secondary:hover { border-color: var(--gold); color: var(--gold-light); }
 
   /* Output */
-  .output-panel { display: none; max-width: 720px; margin: 0 auto 48px; }
-  .output-panel.visible { display: block; }
+  .output-panel { display: block; max-width: 720px; margin: 0 auto 48px; }
+  .output-panel.hidden { display: none; }
   .output-card {
     background: var(--green-dark);
     border-radius: 12px;
@@ -644,7 +644,7 @@
 </div>
 
 <!-- Status panel -->
-<div class="output-panel" id="output-panel">
+<div class="output-panel hidden" id="output-panel">
   <div class="output-card">
     <div class="output-header">
       <div class="output-title" id="status-title">Monitor Status</div>
@@ -814,7 +814,10 @@ async function triggerWorkflow() {
     document.getElementById('gh-owner').classList.add('invalid');
     ghOk = false;
   }
-  if (!ghOk) return;
+  if (!ghOk) {
+    showStatus('error', '❌ Missing GitHub credentials', 'Please fill in your GitHub username and Personal Access Token in Section 07.');
+    return;
+  }
 
   const u      = document.getElementById('username').value.trim();
   const p      = document.getElementById('password').value.trim();
@@ -966,8 +969,8 @@ function showStatus(type, title, body) {
   badge.style.cssText = `background:${c.bg};color:${c.color};border:1px solid ${c.border};font-family:'DM Mono',monospace;font-size:11px;padding:3px 10px;border-radius:4px;`;
   titleEl.textContent = title;
   bodyEl.textContent  = body;
-  panel.classList.add('visible');
-  setTimeout(() => panel.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50);
+  panel.classList.remove('hidden');
+  try { panel.scrollIntoView({ behavior: 'smooth', block: 'start' }); } catch(e) {}
 }
 
 // ── Legacy (kept so resetForm still compiles) ─────────────────────────────────
@@ -997,7 +1000,7 @@ function resetForm() {
   document.getElementById('time-start').value = '07:00';
   document.getElementById('time-end').value   = '11:30';
   document.getElementById('poll-interval').value = '30';
-  document.getElementById('output-panel').classList.remove('visible');
+  document.getElementById('output-panel').classList.add('hidden');
   try { if (!document.getElementById('save-token').checked) localStorage.removeItem('gh_pat'); } catch(e) {}
   ['username','password','login-type','time','gh-token','gh-owner'].forEach(id => {
     const el = document.getElementById('err-'+id);
