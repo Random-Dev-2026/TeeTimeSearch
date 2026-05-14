@@ -62,20 +62,45 @@ session.headers.update({
 
 # ── Auth ──────────────────────────────────────────────────────────────────────
 def login() -> bool:
-    try:
-        resp = session.post(LOGIN_URL, data={
-            "username": FOREUP_USERNAME, "password": FOREUP_PASSWORD,
-            "login_type": LOGIN_TYPE,   "facility_id": FACILITY_ID,
-        }, timeout=20)
-        resp.raise_for_status()
-        data = resp.json()
-        if data.get("status") == "success" or "token" in data or "user_id" in data:
-            log.info("✅ Logged in."); return True
-        if resp.cookies or session.cookies:
-            log.info("✅ Logged in (cookie)."); return True
-        log.error("Login rejected: %s", data); return False
-    except Exception as e:
-        log.error("Login error: %s", e); return False
+    """Try multiple login endpoints used by ForeUp consumer booking pages."""
+    urls_to_try = [
+        f"{BASE_URL}/index.php/api/login",
+        f"{BASE_URL}/index.php/api/customers/login",
+        f"{BASE_URL}/index.php/booking/ajaxreq",
+    ]
+    payloads = [
+        {"username": FOREUP_USERNAME, "password": FOREUP_PASSWORD,
+         "login_type": LOGIN_TYPE, "facility_id": FACILITY_ID},
+        {"email": FOREUP_USERNAME, "password": FOREUP_PASSWORD,
+         "login_type": LOGIN_TYPE, "facility_id": FACILITY_ID},
+    ]
+    for url in urls_to_try:
+        for payload in payloads:
+            try:
+                log.info("Trying login: %s", url)
+                resp = session.post(url, data=payload, timeout=20)
+                log.info("  HTTP %d", resp.status_code)
+                if resp.status_code == 404:
+                    break  # this URL doesn't exist, try next
+                if resp.status_code in (200, 201):
+                    try:
+                        data = resp.json()
+                        log.info("  Response: %s", str(data)[:200])
+                        if (data.get("status") == "success"
+                                or "token" in data or "user_id" in data
+                                or "customer" in data):
+                            log.info("✅ Logged in via %s", url)
+                            return True
+                    except Exception:
+                        pass
+                    if session.cookies:
+                        log.info("✅ Logged in (cookie) via %s", url)
+                        return True
+            except Exception as e:
+                log.warning("  Error: %s", e)
+    log.error("All login attempts failed. user=%s type=%s facility=%s",
+              FOREUP_USERNAME, LOGIN_TYPE, FACILITY_ID)
+    return False
 
 # ── Fetch ─────────────────────────────────────────────────────────────────────
 def get_tee_times(for_date: str) -> list:
