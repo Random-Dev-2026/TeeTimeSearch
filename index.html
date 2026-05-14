@@ -146,20 +146,6 @@
 
   /* Player dots */
   .player-select { display: flex; gap: 10px; }
-  .player-btn {
-    width: 40px; height: 40px;
-    border-radius: 50%;
-    border: 1.5px solid var(--cream-dark);
-    background: #fff;
-    font-family: 'DM Mono', monospace;
-    font-size: 14px; font-weight: 500;
-    color: var(--text-mid);
-    cursor: pointer;
-    transition: all 0.15s;
-    display: flex; align-items: center; justify-content: center;
-  }
-  .player-btn:hover { border-color: var(--green-bright); }
-  .player-btn.active { background: var(--green-dark); border-color: var(--green-dark); color: var(--gold-light); }
 
   /* Tor toggle */
   .tor-toggle { display: flex; align-items: center; gap: 10px; cursor: pointer; user-select: none; }
@@ -545,12 +531,14 @@
     <div class="section-label">04 · Players &amp; Holes</div>
     <div class="row-2">
       <div class="field">
-        <label>Minimum Players Needed</label>
-        <div class="player-select">
-          <button type="button" class="player-btn" onclick="selectPlayers(1, this)">1</button>
-          <button type="button" class="player-btn active" onclick="selectPlayers(2, this)">2</button>
-          <button type="button" class="player-btn" onclick="selectPlayers(3, this)">3</button>
-          <button type="button" class="player-btn" onclick="selectPlayers(4, this)">4</button>
+        <label for="min-players">Minimum Players Needed</label>
+        <div class="select-wrap">
+          <select id="min-players">
+            <option value="1">1 Player</option>
+            <option value="2" selected>2 Players</option>
+            <option value="3">3 Players</option>
+            <option value="4">4 Players</option>
+          </select>
         </div>
       </div>
       <div class="field">
@@ -656,7 +644,6 @@
 
 <script>
 // ── State ──────────────────────────────────────────────────────────────────────
-let selectedPlayers   = 2;
 let torEnabled        = true;
 let envText           = '';  // kept for compatibility
 
@@ -714,13 +701,6 @@ function updateIntervalHint() {
 }
 
 
-
-// ── Player selection ─────────────────────────────────────────────────────────
-function selectPlayers(n, el) {
-  selectedPlayers = n;
-  document.querySelectorAll('.player-btn').forEach(b => b.classList.remove('active'));
-  el.classList.add('active');
-}
 
 // ── Tor toggle ────────────────────────────────────────────────────────────────
 function toggleTor() {
@@ -856,7 +836,7 @@ async function triggerWorkflow() {
       schedule_id:     sched,
       window_start:    ts,
       window_end:      te,
-      min_players:     String(selectedPlayers),
+      min_players:     document.getElementById('min-players').value,
       watch_dates:     watchDates,
       notify_email:    nEmail,
       notify_sms:      nSMS,
@@ -892,7 +872,7 @@ async function triggerWorkflow() {
 ` +
         `Time window:  ${ts} – ${te} EST
 ` +
-        `Players:      ${selectedPlayers}+
+        `Players:      ${document.getElementById('min-players').value}+
 ` +
         `Dates:        ${dateDesc}
 ` +
@@ -992,8 +972,7 @@ function resetForm() {
   });
   document.getElementById('password').value = '';
   selectedLoginType = 'Resident';
-  selectedPlayers   = 2;
-  document.querySelectorAll('.player-btn').forEach(b => b.classList.toggle('active', b.dataset.players === '2'));
+  document.getElementById('min-players').value = '2';
   setDefaultDates();
   document.getElementById('time-start').value = '07:00';
   document.getElementById('time-end').value   = '11:30';
