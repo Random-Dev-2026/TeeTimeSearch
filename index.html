@@ -676,13 +676,20 @@ const SCHEDULES = [
 // ── Init ──────────────────────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
   setDefaultDates();
-  document.getElementById('time-start').value = '07:00';
-  document.getElementById('time-end').value   = '11:30';
 
   // Update hint when interval changes
   document.getElementById('poll-interval').addEventListener('change', updateIntervalHint);
 
-  // ── Restore saved token from localStorage ──────────────────────────────
+  // ── Wire player buttons ────────────────────────────────────────────────
+  document.querySelectorAll('.player-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      selectedPlayers = parseInt(btn.dataset.players);
+      document.querySelectorAll('.player-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    });
+  });
+
+  // ── Restore saved token from localStorage ─────────────────────────────
   try {
     const saved = localStorage.getItem('gh_pat');
     if (saved) {
@@ -716,7 +723,6 @@ function updateIntervalHint() {
 }
 
 
-// ── Player buttons (wired in main DOMContentLoaded) ─────────────────────────
 
 // ── Tor toggle ────────────────────────────────────────────────────────────────
 function toggleTor() {
@@ -821,7 +827,7 @@ async function triggerWorkflow() {
   const nEmail = document.getElementById('notify-email').value.trim();
   const nSMS   = document.getElementById('notify-sms').value.trim();
 
-  // Build date range string
+  // Build date range string — single date if no end date, range if both set
   let watchDates = '';
   if (ds && de) {
     const dates = [];
@@ -829,6 +835,8 @@ async function triggerWorkflow() {
     const end = new Date(de + 'T00:00:00');
     while (cur <= end) { dates.push(cur.toISOString().split('T')[0]); cur.setDate(cur.getDate()+1); }
     watchDates = dates.join(',');
+  } else if (ds) {
+    watchDates = ds;  // single date — only look on this one day
   }
 
   // Show loading state
@@ -875,7 +883,7 @@ async function triggerWorkflow() {
       const schedObj = SCHEDULES.find(s => s.id === sched) || { name: sched };
       const dateDesc = watchDates
         ? watchDates.split(',').slice(0,3).join(', ') + (watchDates.split(',').length > 3 ? '…' : '')
-        : 'next 7 days';
+        : 'next 7 days (no date specified)';
       const runsUrl = `https://github.com/${ghOwner}/${GH_REPO}/actions`;
 
       showStatus('success', '✅ Monitor is running!',
