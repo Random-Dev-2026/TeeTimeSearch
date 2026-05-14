@@ -9,14 +9,12 @@
 
   :root {
     --green-dark:   #1a2e1a;
-    --green-mid:    #2d4a2d;
     --green-bright: #4a7c4a;
     --green-light:  #7ab87a;
     --gold:         #c9a84c;
     --gold-light:   #e8c97a;
     --cream:        #f5f0e8;
     --cream-dark:   #e8e0d0;
-    --sand:         #d4c4a0;
     --text-dark:    #1a1a14;
     --text-mid:     #3a3a2e;
     --text-light:   #6a6a5a;
@@ -37,27 +35,19 @@
       radial-gradient(ellipse at 80% 100%, rgba(201,168,76,0.15) 0%, transparent 50%);
   }
 
-  .header {
-    text-align: center;
-    padding: 44px 24px 28px;
-  }
+  .header { text-align: center; padding: 44px 24px 28px; }
   .header-flag { font-size: 48px; display: block; margin-bottom: 10px; }
   .header h1 {
     font-family: 'Playfair Display', serif;
     font-size: clamp(26px, 5vw, 42px);
-    font-weight: 900;
-    color: var(--cream);
-    letter-spacing: -0.5px;
-    line-height: 1.1;
+    font-weight: 900; color: var(--cream);
   }
   .header h1 span { color: var(--gold); }
   .header p { margin-top: 8px; font-size: 13px; color: var(--green-light); font-family: 'DM Mono', monospace; }
 
   .card {
-    max-width: 720px;
-    margin: 0 auto 32px;
-    background: var(--cream);
-    border-radius: 12px;
+    max-width: 720px; margin: 0 auto 32px;
+    background: var(--cream); border-radius: 12px;
     box-shadow: var(--shadow), 0 0 0 1px rgba(201,168,76,0.2);
     overflow: hidden;
   }
@@ -66,16 +56,9 @@
   .section:last-child { border-bottom: none; }
 
   .section-label {
-    font-family: 'DM Mono', monospace;
-    font-size: 10px;
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    color: var(--green-bright);
-    margin-bottom: 16px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
+    font-family: 'DM Mono', monospace; font-size: 10px; font-weight: 500;
+    text-transform: uppercase; letter-spacing: 2px; color: var(--green-bright);
+    margin-bottom: 16px; display: flex; align-items: center; gap: 8px;
   }
   .section-label::after { content:''; flex:1; height:1px; background:var(--cream-dark); }
 
@@ -85,231 +68,100 @@
   label { display:block; font-size:12px; font-weight:500; color:var(--text-mid); margin-bottom:4px; }
 
   input[type="text"], input[type="password"], input[type="email"],
-  input[type="date"], input[type="number"], select {
-    width: 100%;
-    padding: 9px 12px;
-    border: 1.5px solid var(--cream-dark);
-    border-radius: var(--radius);
-    font-family: 'DM Sans', sans-serif;
-    font-size: 14px;
-    color: var(--text-dark);
-    background: #fff;
-    transition: border-color 0.15s, box-shadow 0.15s;
-    -webkit-appearance: none;
-    appearance: none;
+  input[type="date"], select {
+    width: 100%; padding: 9px 12px;
+    border: 1.5px solid var(--cream-dark); border-radius: var(--radius);
+    font-family: 'DM Sans', sans-serif; font-size: 14px;
+    color: var(--text-dark); background: #fff;
+    transition: border-color 0.15s; -webkit-appearance: none; appearance: none;
   }
   input:focus, select:focus {
-    outline: none;
-    border-color: var(--green-bright);
+    outline: none; border-color: var(--green-bright);
     box-shadow: 0 0 0 3px rgba(74,124,74,0.12);
   }
   input[type="password"] { font-family: 'DM Mono', monospace; letter-spacing: 2px; }
 
   .select-wrap { position: relative; }
   .select-wrap::after {
-    content: '▾';
-    position: absolute;
-    right: 11px; top: 50%;
-    transform: translateY(-50%);
-    color: var(--text-light);
-    pointer-events: none;
-    font-size: 12px;
+    content: '▾'; position: absolute; right: 11px; top: 50%;
+    transform: translateY(-50%); color: var(--text-light); pointer-events: none; font-size: 12px;
   }
 
   .row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-  .row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
 
-  /* Login type pills */
-  .login-types { display: flex; flex-wrap: wrap; gap: 8px; }
-  .login-btn {
-    padding: 8px 16px;
-    border: 1.5px solid var(--cream-dark);
-    border-radius: 20px;
-    background: #fff;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 13px; font-weight: 500;
-    color: var(--text-mid);
-    cursor: pointer;
-    transition: all 0.15s;
-    user-select: none;
-  }
-  .login-btn:hover { border-color: var(--green-bright); color: var(--green-dark); }
-  .login-btn.active {
-    background: var(--green-dark);
-    border-color: var(--green-dark);
-    color: var(--gold-light);
-  }
-
-  /* Time row */
   .time-row { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 10px; }
   .time-sep { font-size: 16px; color: var(--text-light); text-align: center; }
 
-  /* Player dots */
-  .player-select { display: flex; gap: 10px; }
-
-  /* Tor toggle */
   .tor-toggle { display: flex; align-items: center; gap: 10px; cursor: pointer; user-select: none; }
   .toggle-track {
-    width: 38px; height: 21px;
-    background: var(--cream-dark);
-    border-radius: 11px;
-    position: relative;
-    transition: background 0.2s;
-    flex-shrink: 0;
+    width: 38px; height: 21px; background: var(--cream-dark);
+    border-radius: 11px; position: relative; transition: background 0.2s; flex-shrink: 0;
   }
   .toggle-track.on { background: var(--green-bright); }
   .toggle-thumb {
-    width: 15px; height: 15px;
-    background: #fff;
-    border-radius: 50%;
-    position: absolute;
-    top: 3px; left: 3px;
-    transition: transform 0.2s;
+    width: 15px; height: 15px; background: #fff; border-radius: 50%;
+    position: absolute; top: 3px; left: 3px; transition: transform 0.2s;
     box-shadow: 0 1px 4px rgba(0,0,0,0.2);
   }
   .toggle-track.on .toggle-thumb { transform: translateX(17px); }
   .toggle-label { font-size: 13px; color: var(--text-mid); font-weight: 500; }
   .toggle-sub { font-size: 11px; color: var(--text-light); }
-  .tor-fields { margin-top: 14px; display: none; }
-  .tor-fields.visible { display: block; }
 
-  /* Actions */
   .actions {
-    padding: 22px 30px;
-    background: var(--green-dark);
+    padding: 22px 30px; background: var(--green-dark);
     display: flex; gap: 10px; align-items: center; flex-wrap: wrap;
   }
   .btn-primary {
-    flex: 1;
-    padding: 12px 22px;
-    background: var(--gold);
-    color: var(--green-dark);
-    border: none;
-    border-radius: var(--radius);
-    font-family: 'DM Sans', sans-serif;
-    font-size: 14px; font-weight: 700;
-    cursor: pointer;
-    transition: background 0.15s, transform 0.1s;
-    white-space: nowrap;
+    flex: 1; padding: 12px 22px; background: var(--gold); color: var(--green-dark);
+    border: none; border-radius: var(--radius);
+    font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 700;
+    cursor: pointer; transition: background 0.15s; white-space: nowrap;
   }
-  .btn-primary:hover { background: var(--gold-light); transform: translateY(-1px); }
+  .btn-primary:hover { background: var(--gold-light); }
+  .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; }
   .btn-secondary {
-    padding: 12px 16px;
-    background: transparent;
-    color: var(--cream);
-    border: 1.5px solid rgba(245,240,232,0.25);
-    border-radius: var(--radius);
-    font-family: 'DM Sans', sans-serif;
-    font-size: 13px; font-weight: 500;
-    cursor: pointer;
-    transition: all 0.15s;
+    padding: 12px 16px; background: transparent; color: var(--cream);
+    border: 1.5px solid rgba(245,240,232,0.25); border-radius: var(--radius);
+    font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500; cursor: pointer;
   }
   .btn-secondary:hover { border-color: var(--gold); color: var(--gold-light); }
 
-  /* Output */
-  .output-panel { display: block; max-width: 720px; margin: 0 auto 48px; }
-  .output-panel.hidden { display: none; }
-  .output-card {
-    background: var(--green-dark);
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: var(--shadow);
+  .status-panel {
+    display: none; max-width: 720px; margin: 0 auto 48px;
+    background: var(--green-dark); border-radius: 12px;
+    overflow: hidden; box-shadow: var(--shadow);
     border: 1px solid rgba(201,168,76,0.2);
   }
-  .output-header {
-    padding: 14px 22px;
-    display: flex; align-items: center; justify-content: space-between;
+  .status-panel.show { display: block; }
+  .status-header {
+    padding: 14px 22px; display: flex; align-items: center; justify-content: space-between;
     border-bottom: 1px solid rgba(255,255,255,0.08);
   }
-  .output-title { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--green-light); text-transform: uppercase; letter-spacing: 1.5px; }
-  .copy-btn {
-    padding: 5px 11px;
-    background: rgba(201,168,76,0.15);
-    color: var(--gold-light);
-    border: 1px solid rgba(201,168,76,0.3);
-    border-radius: 4px;
-    font-family: 'DM Mono', monospace;
-    font-size: 11px;
-    cursor: pointer;
-    transition: background 0.15s;
+  .status-title { font-family: 'DM Mono', monospace; font-size: 12px; color: var(--cream); font-weight: 500; }
+  .status-badge { font-family: 'DM Mono', monospace; font-size: 11px; padding: 3px 10px; border-radius: 4px; }
+  .status-body {
+    padding: 18px 22px; font-family: 'DM Mono', monospace; font-size: 13px;
+    line-height: 1.8; color: var(--cream); white-space: pre-wrap;
   }
-  .copy-btn:hover { background: rgba(201,168,76,0.28); }
-  .copy-btn.copied { color: var(--green-light); border-color: var(--green-light); }
-  .output-body {
-    padding: 18px 22px;
-    font-family: 'DM Mono', monospace;
-    font-size: 12px;
-    line-height: 1.9;
-    color: var(--cream);
-    white-space: pre;
-    overflow-x: auto;
-  }
-  .output-body .comment { color: #7ab87a; }
-  .output-body .key { color: var(--gold-light); }
-  .output-body .val { color: #c9a84c; }
-  .output-cmd { margin-top: 10px; background: rgba(0,0,0,0.3); border-radius: 8px; overflow: hidden; }
-  .cmd-header { padding: 9px 18px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.06); }
-  .cmd-label { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--text-light); letter-spacing: 1px; }
-  .cmd-body { padding: 13px 18px; font-family: 'DM Mono', monospace; font-size: 13px; color: var(--cream); }
-  .cmd-body .prompt { color: var(--green-light); margin-right: 8px; }
 
-  /* Helpers */
   .hint { font-size: 11px; color: var(--text-light); margin-top: 3px; }
   .badge {
-    display: inline-block;
-    padding: 2px 7px;
-    background: rgba(74,124,74,0.12);
-    color: var(--green-bright);
-    border-radius: 4px;
-    font-size: 10px;
-    font-family: 'DM Mono', monospace;
-    font-weight: 500;
-    letter-spacing: 0.5px;
-    vertical-align: middle;
-    margin-left: 5px;
+    display: inline-block; padding: 2px 7px; background: rgba(74,124,74,0.12);
+    color: var(--green-bright); border-radius: 4px; font-size: 10px;
+    font-family: 'DM Mono', monospace; font-weight: 500; vertical-align: middle; margin-left: 5px;
   }
-  .divider { height: 1px; background: var(--cream-dark); margin: 14px 0; }
-  .field-error { font-size: 11px; color: var(--error); margin-top: 3px; display: none; }
-  .field-error.visible { display: block; }
-  input.invalid, select.invalid { border-color: var(--error) !important; }
-
-  /* Info box */
+  .field-error { font-size: 11px; color: var(--error); margin-top: 4px; display: none; }
+  .field-error.show { display: block; }
+  input.err { border-color: var(--error) !important; }
   .info-box {
-    padding: 11px 13px;
-    background: rgba(74,124,74,0.08);
-    border-radius: var(--radius);
-    border-left: 3px solid var(--green-bright);
-    font-size: 12px;
-    color: var(--text-mid);
-    line-height: 1.6;
-    margin-top: 12px;
+    padding: 11px 13px; background: rgba(74,124,74,0.08); border-radius: var(--radius);
+    border-left: 3px solid var(--green-bright); font-size: 12px; color: var(--text-mid);
+    line-height: 1.6; margin-top: 12px;
   }
-  .info-box code {
-    font-family: 'DM Mono', monospace;
-    background: var(--cream-dark);
-    padding: 1px 5px;
-    border-radius: 3px;
-  }
-
-  /* Prefilled badge */
-  .prefilled-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    padding: 2px 8px;
-    background: rgba(46,125,50,0.12);
-    color: var(--success, #2e7d32);
-    border-radius: 4px;
-    font-size: 10px;
-    font-family: 'DM Mono', monospace;
-    vertical-align: middle;
-    margin-left: 6px;
-  }
-  --success: #2e7d32;
 
   @media (max-width: 580px) {
     .section { padding: 20px 18px; }
-    .row-2, .row-3 { grid-template-columns: 1fr; }
+    .row-2 { grid-template-columns: 1fr; }
     .actions { padding: 18px; }
   }
 </style>
@@ -351,7 +203,6 @@
           <option value="Public">Public</option>
         </select>
       </div>
-      <div class="field-error" id="err-login-type">Please select a login type.</div>
     </div>
   </div>
 
@@ -370,7 +221,6 @@
           <option value="2431">Bethpage (All Courses)</option>
         </select>
       </div>
-      <div class="field-error" id="err-schedule">Please select a course.</div>
     </div>
   </div>
 
@@ -423,102 +273,34 @@
             <option value="11:30">11:30 am</option>
             <option value="11:45">11:45 am</option>
             <option value="12:00">12:00 pm</option>
-            <option value="12:15">12:15 pm</option>
             <option value="12:30">12:30 pm</option>
-            <option value="12:45">12:45 pm</option>
             <option value="13:00">1:00 pm</option>
-            <option value="13:15">1:15 pm</option>
             <option value="13:30">1:30 pm</option>
-            <option value="13:45">1:45 pm</option>
             <option value="14:00">2:00 pm</option>
-            <option value="14:15">2:15 pm</option>
-            <option value="14:30">2:30 pm</option>
-            <option value="14:45">2:45 pm</option>
-            <option value="15:00">3:00 pm</option>
-            <option value="15:15">3:15 pm</option>
-            <option value="15:30">3:30 pm</option>
-            <option value="15:45">3:45 pm</option>
-            <option value="16:00">4:00 pm</option>
-            <option value="16:15">4:15 pm</option>
-            <option value="16:30">4:30 pm</option>
-            <option value="16:45">4:45 pm</option>
-            <option value="17:00">5:00 pm</option>
-            <option value="17:15">5:15 pm</option>
-            <option value="17:30">5:30 pm</option>
-            <option value="17:45">5:45 pm</option>
-            <option value="18:00">6:00 pm</option>
-            <option value="18:15">6:15 pm</option>
-            <option value="18:30">6:30 pm</option>
-            <option value="18:45">6:45 pm</option>
-            <option value="19:00">7:00 pm</option>
-            <option value="19:15">7:15 pm</option>
-            <option value="19:30">7:30 pm</option>
-            <option value="19:45">7:45 pm</option>
           </select>
         </div>
         <div class="time-sep">→</div>
         <div class="select-wrap">
           <select id="time-end">
-            <option value="05:00">5:00 am</option>
-            <option value="05:15">5:15 am</option>
-            <option value="05:30">5:30 am</option>
-            <option value="05:45">5:45 am</option>
             <option value="06:00">6:00 am</option>
-            <option value="06:15">6:15 am</option>
             <option value="06:30">6:30 am</option>
-            <option value="06:45">6:45 am</option>
             <option value="07:00">7:00 am</option>
-            <option value="07:15">7:15 am</option>
             <option value="07:30">7:30 am</option>
-            <option value="07:45">7:45 am</option>
             <option value="08:00">8:00 am</option>
-            <option value="08:15">8:15 am</option>
             <option value="08:30">8:30 am</option>
-            <option value="08:45">8:45 am</option>
             <option value="09:00">9:00 am</option>
-            <option value="09:15">9:15 am</option>
             <option value="09:30">9:30 am</option>
-            <option value="09:45">9:45 am</option>
             <option value="10:00">10:00 am</option>
-            <option value="10:15">10:15 am</option>
             <option value="10:30">10:30 am</option>
-            <option value="10:45">10:45 am</option>
             <option value="11:00">11:00 am</option>
-            <option value="11:15">11:15 am</option>
             <option value="11:30" selected>11:30 am</option>
-            <option value="11:45">11:45 am</option>
             <option value="12:00">12:00 pm</option>
-            <option value="12:15">12:15 pm</option>
             <option value="12:30">12:30 pm</option>
-            <option value="12:45">12:45 pm</option>
             <option value="13:00">1:00 pm</option>
-            <option value="13:15">1:15 pm</option>
             <option value="13:30">1:30 pm</option>
-            <option value="13:45">1:45 pm</option>
             <option value="14:00">2:00 pm</option>
-            <option value="14:15">2:15 pm</option>
             <option value="14:30">2:30 pm</option>
-            <option value="14:45">2:45 pm</option>
             <option value="15:00">3:00 pm</option>
-            <option value="15:15">3:15 pm</option>
-            <option value="15:30">3:30 pm</option>
-            <option value="15:45">3:45 pm</option>
-            <option value="16:00">4:00 pm</option>
-            <option value="16:15">4:15 pm</option>
-            <option value="16:30">4:30 pm</option>
-            <option value="16:45">4:45 pm</option>
-            <option value="17:00">5:00 pm</option>
-            <option value="17:15">5:15 pm</option>
-            <option value="17:30">5:30 pm</option>
-            <option value="17:45">5:45 pm</option>
-            <option value="18:00">6:00 pm</option>
-            <option value="18:15">6:15 pm</option>
-            <option value="18:30">6:30 pm</option>
-            <option value="18:45">6:45 pm</option>
-            <option value="19:00">7:00 pm</option>
-            <option value="19:15">7:15 pm</option>
-            <option value="19:30">7:30 pm</option>
-            <option value="19:45">7:45 pm</option>
           </select>
         </div>
       </div>
@@ -548,21 +330,16 @@
         </div>
       </div>
     </div>
-
     <div class="field" style="margin-top:14px;">
-      <label>Check Interval <span class="badge">how often to poll</span></label>
+      <label for="poll-interval">Check Interval <span class="badge">how often to poll</span></label>
       <div class="select-wrap" style="max-width:260px;">
         <select id="poll-interval">
-          <option value="3">3 seconds (fastest — Tor adds natural buffer)</option>
-          <option value="5">5 seconds (fast)</option>
-          <option value="10">10 seconds</option>
           <option value="15">15 seconds</option>
           <option value="30" selected>30 seconds (recommended)</option>
           <option value="60">60 seconds</option>
           <option value="120">2 minutes</option>
         </select>
       </div>
-      <div class="hint" id="interval-hint">Through Tor, 3s sleep = ~15-30s effective gap between requests on the server.</div>
     </div>
   </div>
 
@@ -578,12 +355,12 @@
       <input type="text" id="notify-sms" placeholder="5551234567@vtext.com">
       <div class="hint">Verizon @vtext.com · AT&amp;T @txt.att.net · T‑Mobile @tmomail.net</div>
     </div>
-    <div class="info-box" style="margin-top:10px;">
-      ⚡ The monitor <strong>stops automatically</strong> after finding the first matching tee time and sending you the alert.
+    <div class="info-box">
+      ⚡ Stops automatically after finding the first match. Always notifies you after 2 hours whether or not a time was found.
     </div>
   </div>
 
-  <!-- 06 Tor -->
+  <!-- 06 Anonymity -->
   <div class="section">
     <div class="section-label">06 · Anonymity (Tor)</div>
     <div class="tor-toggle" onclick="toggleTor()">
@@ -593,65 +370,51 @@
         <div class="toggle-sub">Routes traffic through Tor — hides your real IP from ForeUp</div>
       </div>
     </div>
-    <!-- Hidden fields still present so buildEnv() can read them -->
-    <div id="tor-fields" style="display:none;">
-      <input type="hidden" id="tor-host" value="127.0.0.1">
-      <input type="hidden" id="tor-socks-port" value="9050">
-      <input type="hidden" id="tor-ctrl-port" value="9051">
-      <select id="max-retries" style="display:none;">
-        <option value="3" selected>3</option>
-      </select>
-    </div>
   </div>
 
   <!-- 07 GitHub -->
   <div class="section">
     <div class="section-label">07 · GitHub Connection</div>
     <div class="field">
-      <label for="gh-token">Personal Access Token <span class="badge">used to trigger the monitor</span></label>
+      <label for="gh-token">Personal Access Token</label>
       <input type="password" id="gh-token" placeholder="github_pat_…" autocomplete="off">
-      <div class="hint">Fine-grained PAT with <strong>Actions: Read &amp; Write</strong> permission on your TeeTimeSearch repo. <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" style="color:var(--green-bright);">Create one here ↗</a></div>
+      <div class="hint">Fine-grained PAT · Actions: Read &amp; Write · TeeTimeSearch repo only. <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" style="color:var(--green-bright);">Create one here ↗</a></div>
       <div style="margin-top:6px;display:flex;align-items:center;gap:8px;">
         <input type="checkbox" id="save-token" style="width:auto;margin:0;">
         <label for="save-token" style="margin:0;font-size:12px;color:var(--text-light);cursor:pointer;">Remember token on this device</label>
       </div>
-      <div class="field-error" id="err-gh-token">Please enter your GitHub token.</div>
+      <div class="field-error" id="err-gh-token">Please enter your GitHub Personal Access Token.</div>
     </div>
     <div class="field">
       <label for="gh-owner">GitHub Username</label>
-      <input type="text" id="gh-owner" placeholder="Random-Dev-2026" value="Random-Dev-2026">
+      <input type="text" id="gh-owner" value="Random-Dev-2026">
       <div class="field-error" id="err-gh-owner">Please enter your GitHub username.</div>
     </div>
   </div>
 
   <!-- Actions -->
   <div class="actions">
-    <button class="btn-primary" id="run-btn" onclick="triggerWorkflow()">⛳ Start Monitor →</button>
-    <button class="btn-secondary" onclick="resetForm()">Reset</button>
+    <button type="button" class="btn-primary" id="run-btn" onclick="triggerWorkflow()">⛳ Start Monitor →</button>
+    <button type="button" class="btn-secondary" onclick="resetForm()">Reset</button>
   </div>
 </div>
 
-<!-- Status panel -->
-<div class="output-panel hidden" id="output-panel">
-  <div class="output-card">
-    <div class="output-header">
-      <div class="output-title" id="status-title">Monitor Status</div>
-      <div id="status-badge" style="font-family:'DM Mono',monospace;font-size:11px;padding:3px 10px;border-radius:4px;"></div>
-    </div>
-    <div class="output-body" id="status-body" style="white-space:pre-wrap;line-height:1.7;"></div>
+<!-- Status -->
+<div class="status-panel" id="status-panel">
+  <div class="status-header">
+    <div class="status-title" id="status-title">Monitor Status</div>
+    <div class="status-badge" id="status-badge"></div>
   </div>
+  <div class="status-body" id="status-body"></div>
 </div>
 
 <script>
-// ── State ──────────────────────────────────────────────────────────────────────
-let torEnabled        = true;
-let envText           = '';  // kept for compatibility
+// ── Constants ─────────────────────────────────────────────────────────────────
+var GH_REPO       = 'TeeTimeSearch';
+var WORKFLOW_FILE = 'tee-time-monitor.yml';
+var torEnabled    = true;
 
-const GH_REPO = 'TeeTimeSearch';
-const WORKFLOW_FILE = 'tee-time-monitor.yml';
-
-
-const SCHEDULES = [
+var SCHEDULES = [
   { id: '2432', name: 'Bethpage Black' },
   { id: '2433', name: 'Bethpage Red' },
   { id: '2434', name: 'Bethpage Blue' },
@@ -660,330 +423,242 @@ const SCHEDULES = [
   { id: '2431', name: 'Bethpage (All Courses)' },
 ];
 
-// ── Init ──────────────────────────────────────────────────────────────────────
-document.addEventListener('DOMContentLoaded', () => {
-  setDefaultDates();
+// ── Init ─────────────────────────────────────────────────────────────────────
+window.onload = function() {
+  // Set today as default date
+  var today = new Date();
+  var dd = String(today.getDate()).padStart(2,'0');
+  var mm = String(today.getMonth()+1).padStart(2,'0');
+  var yyyy = today.getFullYear();
+  document.getElementById('date-start').value = yyyy+'-'+mm+'-'+dd;
 
-  // Update hint when interval changes
-  document.getElementById('poll-interval').addEventListener('change', updateIntervalHint);
-
-  // ── Restore saved token from localStorage ─────────────────────────────
+  // Restore saved token
   try {
-    const saved = localStorage.getItem('gh_pat');
+    var saved = localStorage.getItem('gh_pat');
     if (saved) {
       document.getElementById('gh-token').value = saved;
       document.getElementById('save-token').checked = true;
     }
   } catch(e) {}
-
-  // ── Auto-save token when user types / checks the box ──────────────────
-  document.getElementById('gh-token').addEventListener('input', maybeSaveToken);
-  document.getElementById('save-token').addEventListener('change', maybeSaveToken);
-});
-
-function setDefaultDates() {
-  const today = new Date();
-  const fmt   = d => d.toISOString().split('T')[0];
-  document.getElementById('date-start').value = fmt(today);
-  // date-end intentionally left blank — user fills in only if checking a range
-}
-
-function updateIntervalHint() {
-  const v    = parseInt(document.getElementById('poll-interval').value);
-  const hint = document.getElementById('interval-hint');
-  if (v <= 5) {
-    hint.textContent = `Through Tor, ${v}s sleep ≈ 15-30s effective gap on the server — safe to use.`;
-    hint.style.color = 'var(--green-bright)';
-  } else {
-    hint.textContent = `Checks every ${v} seconds. Recommended for non-Tor use.`;
-    hint.style.color = 'var(--text-light)';
-  }
-}
-
-
+};
 
 // ── Tor toggle ────────────────────────────────────────────────────────────────
 function toggleTor() {
   torEnabled = !torEnabled;
-  document.getElementById('tor-track').classList.toggle('on', torEnabled);
-  // tor-fields is always hidden from view; only the toggle state matters
+  var track = document.getElementById('tor-track');
+  if (torEnabled) {
+    track.classList.add('on');
+  } else {
+    track.classList.remove('on');
+  }
 }
 
-// ── Time parsing ──────────────────────────────────────────────────────────────
-function parseTime(str) {
-  str = str.trim().toLowerCase();
-  let m = str.match(/^(\d{1,2}):(\d{2})$/);
-  if (m) return `${m[1].padStart(2,'0')}:${m[2]}`;
-  m = str.match(/^(\d{1,2})(am|pm)$/);
-  if (m) {
-    let h = parseInt(m[1]);
-    if (m[2] === 'pm' && h < 12) h += 12;
-    if (m[2] === 'am' && h === 12) h = 0;
-    return `${String(h).padStart(2,'0')}:00`;
+// ── Show status panel ─────────────────────────────────────────────────────────
+function showStatus(type, title, body) {
+  var panel  = document.getElementById('status-panel');
+  var titleEl = document.getElementById('status-title');
+  var badge  = document.getElementById('status-badge');
+  var bodyEl = document.getElementById('status-body');
+
+  titleEl.textContent = title;
+  bodyEl.textContent  = body;
+  panel.classList.add('show');
+
+  if (type === 'success') {
+    badge.textContent = 'RUNNING';
+    badge.style.cssText = 'background:rgba(74,124,74,0.2);color:#7ab87a;border:1px solid rgba(74,124,74,0.4);font-family:DM Mono,monospace;font-size:11px;padding:3px 10px;border-radius:4px;';
+  } else if (type === 'error') {
+    badge.textContent = 'ERROR';
+    badge.style.cssText = 'background:rgba(192,57,43,0.15);color:#e07070;border:1px solid rgba(192,57,43,0.4);font-family:DM Mono,monospace;font-size:11px;padding:3px 10px;border-radius:4px;';
+  } else {
+    badge.textContent = 'LAUNCHING';
+    badge.style.cssText = 'background:rgba(201,168,76,0.15);color:#c9a84c;border:1px solid rgba(201,168,76,0.4);font-family:DM Mono,monospace;font-size:11px;padding:3px 10px;border-radius:4px;';
   }
-  m = str.match(/^(\d{1,2}):(\d{2})(am|pm)$/);
-  if (m) {
-    let h = parseInt(m[1]);
-    if (m[3] === 'pm' && h < 12) h += 12;
-    if (m[3] === 'am' && h === 12) h = 0;
-    return `${String(h).padStart(2,'0')}:${m[2]}`;
-  }
-  return null;
+
+  panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
 // ── Validation ────────────────────────────────────────────────────────────────
-function validate() {
-  let ok = true;
-  ['username','password'].forEach(id => {
-    document.getElementById('err-'+id).classList.remove('visible');
-    document.getElementById(id).classList.remove('invalid');
-    if (!document.getElementById(id).value.trim()) {
-      document.getElementById('err-'+id).classList.add('visible');
-      document.getElementById(id).classList.add('invalid');
-      ok = false;
-    }
-  });
-  document.getElementById('err-login-type').classList.remove('visible');
-  // select always has a value — no validation needed
+function clearErr(id) {
+  var el = document.getElementById('err-' + id);
+  if (el) el.classList.remove('show');
+  var inp = document.getElementById(id);
+  if (inp) inp.classList.remove('err');
+}
+function setErr(id, msg) {
+  var el = document.getElementById('err-' + id);
+  if (el) { if (msg) el.textContent = msg; el.classList.add('show'); }
+  var inp = document.getElementById(id);
+  if (inp) inp.classList.add('err');
+}
 
-  document.getElementById('err-time').classList.remove('visible');
-  const ts = document.getElementById('time-start').value;
-  const te = document.getElementById('time-end').value;
-  if (ts >= te) {
-    document.getElementById('err-time').classList.add('visible');
-    ok = false;
-  }
+function validate() {
+  var ok = true;
+
+  clearErr('username'); clearErr('password');
+  clearErr('gh-token'); clearErr('gh-owner'); clearErr('time');
+
+  if (!document.getElementById('username').value.trim()) { setErr('username'); ok = false; }
+  if (!document.getElementById('password').value.trim()) { setErr('password'); ok = false; }
+  if (!document.getElementById('gh-token').value.trim()) { setErr('gh-token'); ok = false; }
+  if (!document.getElementById('gh-owner').value.trim()) { setErr('gh-owner'); ok = false; }
+
+  var ts = document.getElementById('time-start').value;
+  var te = document.getElementById('time-end').value;
+  if (ts >= te) { setErr('time', 'End time must be after start time.'); ok = false; }
+
   return ok;
 }
 
-// ── Token persistence ────────────────────────────────────────────────────────
+// ── Save token ────────────────────────────────────────────────────────────────
 function maybeSaveToken() {
   try {
-    const save  = document.getElementById('save-token').checked;
-    const token = document.getElementById('gh-token').value.trim();
-    if (save && token) {
-      localStorage.setItem('gh_pat', token);
+    if (document.getElementById('save-token').checked) {
+      localStorage.setItem('gh_pat', document.getElementById('gh-token').value.trim());
     } else {
       localStorage.removeItem('gh_pat');
     }
   } catch(e) {}
 }
 
-// ── Trigger GitHub Actions workflow ──────────────────────────────────────────
-async function triggerWorkflow() {
+// ── Trigger workflow ──────────────────────────────────────────────────────────
+function triggerWorkflow() {
   if (!validate()) return;
 
-  const ghToken = document.getElementById('gh-token').value.trim();
-  const ghOwner = document.getElementById('gh-owner').value.trim();
+  var ghToken = document.getElementById('gh-token').value.trim();
+  var ghOwner = document.getElementById('gh-owner').value.trim();
+  var u       = document.getElementById('username').value.trim();
+  var p       = document.getElementById('password').value.trim();
+  var sched   = document.getElementById('schedule').value;
+  var ts      = document.getElementById('time-start').value;
+  var te      = document.getElementById('time-end').value;
+  var ds      = document.getElementById('date-start').value;
+  var de      = document.getElementById('date-end').value;
+  var poll    = document.getElementById('poll-interval').value;
+  var nEmail  = document.getElementById('notify-email').value.trim();
+  var nSMS    = document.getElementById('notify-sms').value.trim();
+  var lt      = document.getElementById('login-type').value;
+  var mp      = document.getElementById('min-players').value;
 
-  // Validate GitHub fields
-  let ghOk = true;
-  ['gh-token','gh-owner'].forEach(id => {
-    document.getElementById('err-' + id).classList.remove('visible');
-    document.getElementById(id).classList.remove('invalid');
-  });
-  if (!ghToken) {
-    document.getElementById('err-gh-token').classList.add('visible');
-    document.getElementById('gh-token').classList.add('invalid');
-    ghOk = false;
-  }
-  if (!ghOwner) {
-    document.getElementById('err-gh-owner').classList.add('visible');
-    document.getElementById('gh-owner').classList.add('invalid');
-    ghOk = false;
-  }
-  if (!ghOk) {
-    showStatus('error', '❌ Missing GitHub credentials', 'Please fill in your GitHub username and Personal Access Token in Section 07.');
-    return;
-  }
-
-  const u      = document.getElementById('username').value.trim();
-  const p      = document.getElementById('password').value.trim();
-  const sched  = document.getElementById('schedule').value;
-  const ts     = document.getElementById('time-start').value;
-  const te     = document.getElementById('time-end').value;
-  const ds     = document.getElementById('date-start').value;
-  const de     = document.getElementById('date-end').value;
-  const poll   = document.getElementById('poll-interval').value;
-  const nEmail = document.getElementById('notify-email').value.trim();
-  const nSMS   = document.getElementById('notify-sms').value.trim();
-
-  // Build date range string — single date if no end date, range if both set
-  let watchDates = '';
+  // Build dates string
+  var watchDates = '';
   if (ds && de) {
-    const dates = [];
-    let cur = new Date(ds + 'T00:00:00');
-    const end = new Date(de + 'T00:00:00');
-    while (cur <= end) { dates.push(cur.toISOString().split('T')[0]); cur.setDate(cur.getDate()+1); }
+    var dates = [];
+    var cur = new Date(ds + 'T12:00:00');
+    var end = new Date(de + 'T12:00:00');
+    while (cur <= end) {
+      var d = cur.toISOString().split('T')[0];
+      dates.push(d);
+      cur.setDate(cur.getDate() + 1);
+    }
     watchDates = dates.join(',');
   } else if (ds) {
-    watchDates = ds;  // single date — only look on this one day
+    watchDates = ds;
   }
 
-  // Show loading state
-  const btn = document.getElementById('run-btn');
-  btn.textContent = '⏳ Launching…';
+  // Disable button, show launching
+  var btn = document.getElementById('run-btn');
   btn.disabled = true;
-  showStatus('launching', '🚀 Connecting to GitHub Actions…', '');
+  btn.textContent = '⏳ Launching…';
+  showStatus('launching', '🚀 Connecting to GitHub Actions…', 'Sending your settings to GitHub. This takes just a moment.');
 
-  // Build the workflow_dispatch API payload
-  const payload = {
+  var payload = {
     ref: 'main',
     inputs: {
       foreup_username: u,
       foreup_password: p,
-      login_type:      document.getElementById('login-type').value,
+      login_type:      lt,
       schedule_id:     sched,
       window_start:    ts,
       window_end:      te,
-      min_players:     document.getElementById('min-players').value,
+      min_players:     mp,
       watch_dates:     watchDates,
       notify_email:    nEmail,
       notify_sms:      nSMS,
-      poll_interval:   poll,
+      poll_interval:   poll
     }
   };
 
-  const apiUrl = `https://api.github.com/repos/${ghOwner}/${GH_REPO}/actions/workflows/${WORKFLOW_FILE}/dispatches`;
+  var apiUrl = 'https://api.github.com/repos/' + ghOwner + '/' + GH_REPO + '/actions/workflows/' + WORKFLOW_FILE + '/dispatches';
 
-  try {
-    const resp = await fetch(apiUrl, {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${ghToken}`,
-        'Accept':        'application/vnd.github+json',
-        'Content-Type':  'application/json',
-        'X-GitHub-Api-Version': '2022-11-28',
-      },
-      body: JSON.stringify(payload),
-    });
+  fetch(apiUrl, {
+    method: 'POST',
+    headers: {
+      'Authorization': 'Bearer ' + ghToken,
+      'Accept': 'application/vnd.github+json',
+      'Content-Type': 'application/json',
+      'X-GitHub-Api-Version': '2022-11-28'
+    },
+    body: JSON.stringify(payload)
+  })
+  .then(function(resp) {
+    btn.disabled = false;
+    btn.textContent = '⛳ Start Monitor →';
 
     if (resp.status === 204) {
-      maybeSaveToken();  // persist if checkbox ticked
-      // Success — 204 No Content is GitHub's success response for dispatch
-      const schedObj = SCHEDULES.find(s => s.id === sched) || { name: sched };
-      const dateDesc = watchDates
-        ? watchDates.split(',').slice(0,3).join(', ') + (watchDates.split(',').length > 3 ? '…' : '')
-        : 'next 7 days (no date specified)';
-      const runsUrl = `https://github.com/${ghOwner}/${GH_REPO}/actions`;
-
+      maybeSaveToken();
+      var schedObj = SCHEDULES.find(function(s) { return s.id === sched; }) || { name: sched };
+      var dateDesc = watchDates ? watchDates.split(',').slice(0,3).join(', ') : 'next 7 days';
+      var runsUrl = 'https://github.com/' + ghOwner + '/' + GH_REPO + '/actions';
       showStatus('success', '✅ Monitor is running!',
-        `Course:       ${schedObj.name}
-` +
-        `Time window:  ${ts} – ${te} EST
-` +
-        `Players:      ${document.getElementById('min-players').value}+
-` +
-        `Dates:        ${dateDesc}
-` +
-        `Polling:      every ${poll}s (up to 2 hours)
-
-` +
-        `You'll receive a notification when a tee time is found,
-` +
-        `or after 2 hours if nothing opens up.
-
-` +
-        `Watch live: ${runsUrl}`
+        'Course:      ' + schedObj.name + '\n' +
+        'Window:      ' + ts + ' – ' + te + ' EST\n' +
+        'Players:     ' + mp + '+\n' +
+        'Dates:       ' + dateDesc + '\n' +
+        'Polling:     every ' + poll + 's (up to 2 hours)\n\n' +
+        'You will get a notification when a tee time is found,\nor after 2 hours if nothing opens up.\n\n' +
+        'Watch live: ' + runsUrl
       );
-      btn.textContent = '⛳ Start Monitor →';
-      btn.disabled = false;
-
     } else if (resp.status === 401) {
       showStatus('error', '❌ Authentication failed',
-        'Your GitHub token is invalid or expired.
-Create a new one at github.com/settings/personal-access-tokens/new
-Make sure it has Actions: Read & Write on the TeeTimeSearch repo.');
-      btn.textContent = '⛳ Start Monitor →';
-      btn.disabled = false;
-
+        'Your GitHub token is invalid or expired.\n\nCreate a new one at:\ngithub.com/settings/personal-access-tokens/new\n\nMake sure it has Actions: Read & Write permission on the TeeTimeSearch repo.');
     } else if (resp.status === 404) {
       showStatus('error', '❌ Workflow not found',
-        `Could not find the workflow at:
-${apiUrl}
-
-Check that:
-• Your username is correct (you entered: ${ghOwner})
-• The file .github/workflows/tee-time-monitor.yml is in your repo
-• The repo name is exactly: ${GH_REPO}`);
-      btn.textContent = '⛳ Start Monitor →';
-      btn.disabled = false;
-
+        'Could not find the workflow file.\n\nCheck that:\n• Username is correct: ' + ghOwner + '\n• Repo name is: ' + GH_REPO + '\n• File exists: .github/workflows/' + WORKFLOW_FILE);
     } else if (resp.status === 422) {
       showStatus('error', '❌ Validation error',
-        'GitHub rejected the request. Make sure the workflow file has been committed to the main branch.');
-      btn.textContent = '⛳ Start Monitor →';
-      btn.disabled = false;
-
+        'GitHub rejected the request.\n\nMake sure the workflow file has been committed to the main branch of your repo.');
     } else {
-      const text = await resp.text();
-      showStatus('error', `❌ Unexpected error (HTTP ${resp.status})`, text.slice(0, 300));
-      btn.textContent = '⛳ Start Monitor →';
-      btn.disabled = false;
+      resp.text().then(function(txt) {
+        showStatus('error', '❌ Error (HTTP ' + resp.status + ')', txt.slice(0, 400));
+      });
     }
-
-  } catch (err) {
-    showStatus('error', '❌ Network error', `Could not reach GitHub API.
-${err.message}`);
-    btn.textContent = '⛳ Start Monitor →';
+  })
+  .catch(function(err) {
     btn.disabled = false;
-  }
+    btn.textContent = '⛳ Start Monitor →';
+    showStatus('error', '❌ Network error', 'Could not reach GitHub API.\n\n' + err.message);
+  });
 }
 
-function showStatus(type, title, body) {
-  const panel = document.getElementById('output-panel');
-  const titleEl = document.getElementById('status-title');
-  const badge   = document.getElementById('status-badge');
-  const bodyEl  = document.getElementById('status-body');
-
-  const colors = {
-    launching: { bg: 'rgba(201,168,76,0.15)', color: '#c9a84c',  border: 'rgba(201,168,76,0.4)' },
-    success:   { bg: 'rgba(74,124,74,0.15)',  color: '#7ab87a',  border: 'rgba(74,124,74,0.4)'  },
-    error:     { bg: 'rgba(192,57,43,0.12)',  color: '#e07070',  border: 'rgba(192,57,43,0.4)'  },
-  };
-  const c = colors[type] || colors.launching;
-
-  badge.textContent = type.toUpperCase();
-  badge.style.cssText = `background:${c.bg};color:${c.color};border:1px solid ${c.border};font-family:'DM Mono',monospace;font-size:11px;padding:3px 10px;border-radius:4px;`;
-  titleEl.textContent = title;
-  bodyEl.textContent  = body;
-  panel.classList.remove('hidden');
-  try { panel.scrollIntoView({ behavior: 'smooth', block: 'start' }); } catch(e) {}
-}
-
-// ── Legacy (kept so resetForm still compiles) ─────────────────────────────────
-function generate() { triggerWorkflow(); }
-function copyEnv()  {}
-function copyCmd()  {}
-function esc(s) {
-  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-}
-
-// copyEnv/copyCmd replaced by triggerWorkflow
-function flashCopy(id) {
-  const btn = document.getElementById(id);
-  btn.textContent = 'Copied!'; btn.classList.add('copied');
-  setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 1800);
-}
-
+// ── Reset ─────────────────────────────────────────────────────────────────────
 function resetForm() {
-  document.querySelectorAll('input[type="email"], input[type="text"], input[type="number"]').forEach(i => {
-    if (!['smtp-user','smtp-pass'].includes(i.id)) i.value = '';
-  });
-  document.getElementById('password').value = '';
-  selectedLoginType = 'Resident';
+  document.getElementById('username').value    = '';
+  document.getElementById('password').value    = '';
+  document.getElementById('date-end').value    = '';
+  document.getElementById('notify-email').value = '';
+  document.getElementById('notify-sms').value  = '';
+  document.getElementById('login-type').value  = 'Resident';
+  document.getElementById('schedule').value    = '2432';
+  document.getElementById('time-start').value  = '07:00';
+  document.getElementById('time-end').value    = '11:30';
   document.getElementById('min-players').value = '2';
-  setDefaultDates();
-  document.getElementById('time-start').value = '07:00';
-  document.getElementById('time-end').value   = '11:30';
   document.getElementById('poll-interval').value = '30';
-  document.getElementById('output-panel').classList.add('hidden');
+
+  // Reset date to today
+  var today = new Date();
+  var dd = String(today.getDate()).padStart(2,'0');
+  var mm = String(today.getMonth()+1).padStart(2,'0');
+  document.getElementById('date-start').value = today.getFullYear()+'-'+mm+'-'+dd;
+
+  // Clear errors
+  ['username','password','time','gh-token','gh-owner'].forEach(function(id) { clearErr(id); });
+
+  // Hide status panel
+  document.getElementById('status-panel').classList.remove('show');
+
+  // Clear token from storage if not saved
   try { if (!document.getElementById('save-token').checked) localStorage.removeItem('gh_pat'); } catch(e) {}
-  ['username','password','login-type','time','gh-token','gh-owner'].forEach(id => {
-    const el = document.getElementById('err-'+id);
-    if (el) el.classList.remove('visible');
-  });
-  document.getElementById('output-panel').classList.remove('visible');
 }
 </script>
 </body>
