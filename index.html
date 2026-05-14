@@ -390,17 +390,17 @@
 
   <!-- 03 Date & Time -->
   <div class="section">
-    <div class="section-label">03 · Date &amp; Time Window <span class="badge">EST</span></div>
+    <div class="section-label">03 · Tee Time Date &amp; Window <span class="badge">EST</span></div>
     <div class="row-2" style="margin-bottom:14px;">
       <div class="field">
-        <label for="date-start">Watch From</label>
+        <label for="date-start">Date You Want to Play</label>
         <input type="date" id="date-start">
-        <div class="hint">Blank = today</div>
+        <div class="hint">The reservation date you're looking for</div>
       </div>
       <div class="field">
-        <label for="date-end">Watch Until</label>
+        <label for="date-end">Through Date (optional)</label>
         <input type="date" id="date-end">
-        <div class="hint">Blank = next 7 days</div>
+        <div class="hint">Leave blank if just one date</div>
       </div>
     </div>
     <div class="field">
@@ -700,8 +700,7 @@ function setDefaultDates() {
   const today = new Date();
   const fmt   = d => d.toISOString().split('T')[0];
   document.getElementById('date-start').value = fmt(today);
-  const end = new Date(today); end.setDate(end.getDate() + 7);
-  document.getElementById('date-end').value = fmt(end);
+  // date-end intentionally left blank — user fills in only if checking a range
 }
 
 function updateIntervalHint() {
