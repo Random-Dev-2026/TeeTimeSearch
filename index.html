@@ -397,16 +397,137 @@
     <div class="field">
       <label>Time Window (EST)</label>
       <div class="time-row">
-        <div>
-          <input type="text" id="time-start" placeholder="07:00" maxlength="7">
+        <div class="select-wrap">
+          <select id="time-start">
+            <option value="05:00">5:00 am</option>
+            <option value="05:15">5:15 am</option>
+            <option value="05:30">5:30 am</option>
+            <option value="05:45">5:45 am</option>
+            <option value="06:00">6:00 am</option>
+            <option value="06:15">6:15 am</option>
+            <option value="06:30">6:30 am</option>
+            <option value="06:45">6:45 am</option>
+            <option value="07:00" selected>7:00 am</option>
+            <option value="07:15">7:15 am</option>
+            <option value="07:30">7:30 am</option>
+            <option value="07:45">7:45 am</option>
+            <option value="08:00">8:00 am</option>
+            <option value="08:15">8:15 am</option>
+            <option value="08:30">8:30 am</option>
+            <option value="08:45">8:45 am</option>
+            <option value="09:00">9:00 am</option>
+            <option value="09:15">9:15 am</option>
+            <option value="09:30">9:30 am</option>
+            <option value="09:45">9:45 am</option>
+            <option value="10:00">10:00 am</option>
+            <option value="10:15">10:15 am</option>
+            <option value="10:30">10:30 am</option>
+            <option value="10:45">10:45 am</option>
+            <option value="11:00">11:00 am</option>
+            <option value="11:15">11:15 am</option>
+            <option value="11:30">11:30 am</option>
+            <option value="11:45">11:45 am</option>
+            <option value="12:00">12:00 pm</option>
+            <option value="12:15">12:15 pm</option>
+            <option value="12:30">12:30 pm</option>
+            <option value="12:45">12:45 pm</option>
+            <option value="13:00">1:00 pm</option>
+            <option value="13:15">1:15 pm</option>
+            <option value="13:30">1:30 pm</option>
+            <option value="13:45">1:45 pm</option>
+            <option value="14:00">2:00 pm</option>
+            <option value="14:15">2:15 pm</option>
+            <option value="14:30">2:30 pm</option>
+            <option value="14:45">2:45 pm</option>
+            <option value="15:00">3:00 pm</option>
+            <option value="15:15">3:15 pm</option>
+            <option value="15:30">3:30 pm</option>
+            <option value="15:45">3:45 pm</option>
+            <option value="16:00">4:00 pm</option>
+            <option value="16:15">4:15 pm</option>
+            <option value="16:30">4:30 pm</option>
+            <option value="16:45">4:45 pm</option>
+            <option value="17:00">5:00 pm</option>
+            <option value="17:15">5:15 pm</option>
+            <option value="17:30">5:30 pm</option>
+            <option value="17:45">5:45 pm</option>
+            <option value="18:00">6:00 pm</option>
+            <option value="18:15">6:15 pm</option>
+            <option value="18:30">6:30 pm</option>
+            <option value="18:45">6:45 pm</option>
+            <option value="19:00">7:00 pm</option>
+            <option value="19:15">7:15 pm</option>
+            <option value="19:30">7:30 pm</option>
+            <option value="19:45">7:45 pm</option>
+          </select>
         </div>
         <div class="time-sep">→</div>
-        <div>
-          <input type="text" id="time-end" placeholder="11:30" maxlength="7">
+        <div class="select-wrap">
+          <select id="time-end">
+            <option value="05:00">5:00 am</option>
+            <option value="05:15">5:15 am</option>
+            <option value="05:30">5:30 am</option>
+            <option value="05:45">5:45 am</option>
+            <option value="06:00">6:00 am</option>
+            <option value="06:15">6:15 am</option>
+            <option value="06:30">6:30 am</option>
+            <option value="06:45">6:45 am</option>
+            <option value="07:00">7:00 am</option>
+            <option value="07:15">7:15 am</option>
+            <option value="07:30">7:30 am</option>
+            <option value="07:45">7:45 am</option>
+            <option value="08:00">8:00 am</option>
+            <option value="08:15">8:15 am</option>
+            <option value="08:30">8:30 am</option>
+            <option value="08:45">8:45 am</option>
+            <option value="09:00">9:00 am</option>
+            <option value="09:15">9:15 am</option>
+            <option value="09:30">9:30 am</option>
+            <option value="09:45">9:45 am</option>
+            <option value="10:00">10:00 am</option>
+            <option value="10:15">10:15 am</option>
+            <option value="10:30">10:30 am</option>
+            <option value="10:45">10:45 am</option>
+            <option value="11:00">11:00 am</option>
+            <option value="11:15">11:15 am</option>
+            <option value="11:30" selected>11:30 am</option>
+            <option value="11:45">11:45 am</option>
+            <option value="12:00">12:00 pm</option>
+            <option value="12:15">12:15 pm</option>
+            <option value="12:30">12:30 pm</option>
+            <option value="12:45">12:45 pm</option>
+            <option value="13:00">1:00 pm</option>
+            <option value="13:15">1:15 pm</option>
+            <option value="13:30">1:30 pm</option>
+            <option value="13:45">1:45 pm</option>
+            <option value="14:00">2:00 pm</option>
+            <option value="14:15">2:15 pm</option>
+            <option value="14:30">2:30 pm</option>
+            <option value="14:45">2:45 pm</option>
+            <option value="15:00">3:00 pm</option>
+            <option value="15:15">3:15 pm</option>
+            <option value="15:30">3:30 pm</option>
+            <option value="15:45">3:45 pm</option>
+            <option value="16:00">4:00 pm</option>
+            <option value="16:15">4:15 pm</option>
+            <option value="16:30">4:30 pm</option>
+            <option value="16:45">4:45 pm</option>
+            <option value="17:00">5:00 pm</option>
+            <option value="17:15">5:15 pm</option>
+            <option value="17:30">5:30 pm</option>
+            <option value="17:45">5:45 pm</option>
+            <option value="18:00">6:00 pm</option>
+            <option value="18:15">6:15 pm</option>
+            <option value="18:30">6:30 pm</option>
+            <option value="18:45">6:45 pm</option>
+            <option value="19:00">7:00 pm</option>
+            <option value="19:15">7:15 pm</option>
+            <option value="19:30">7:30 pm</option>
+            <option value="19:45">7:45 pm</option>
+          </select>
         </div>
       </div>
-      <div class="hint">24-hr or 12-hr format (e.g. 07:00 or 7:00am)</div>
-      <div class="field-error" id="err-time">Please enter a valid time window.</div>
+      <div class="field-error" id="err-time">End time must be after start time.</div>
     </div>
   </div>
 
@@ -608,16 +729,7 @@ function renderLoginTypes() {
   });
 }
 
-// ── Player buttons ────────────────────────────────────────────────────────────
-document.addEventListener('DOMContentLoaded', () => {
-  document.querySelectorAll('.player-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      selectedPlayers = parseInt(btn.dataset.players);
-      document.querySelectorAll('.player-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-    });
-  });
-});
+// ── Player buttons (wired in main DOMContentLoaded) ─────────────────────────
 
 // ── Tor toggle ────────────────────────────────────────────────────────────────
 function toggleTor() {
@@ -664,14 +776,10 @@ function validate() {
   if (!selectedLoginType) { document.getElementById('err-login-type').classList.add('visible'); ok = false; }
 
   document.getElementById('err-time').classList.remove('visible');
-  ['time-start','time-end'].forEach(id => document.getElementById(id).classList.remove('invalid'));
-  const ts = parseTime(document.getElementById('time-start').value);
-  const te = parseTime(document.getElementById('time-end').value);
-  if (!ts || !te || ts >= te) {
-    document.getElementById('err-time').textContent = ts && te && ts >= te
-      ? 'End time must be after start time.' : 'Enter times e.g. 07:00 and 11:30';
+  const ts = document.getElementById('time-start').value;
+  const te = document.getElementById('time-end').value;
+  if (ts >= te) {
     document.getElementById('err-time').classList.add('visible');
-    ['time-start','time-end'].forEach(id => document.getElementById(id).classList.add('invalid'));
     ok = false;
   }
   return ok;
@@ -718,8 +826,8 @@ async function triggerWorkflow() {
   const u      = document.getElementById('username').value.trim();
   const p      = document.getElementById('password').value.trim();
   const sched  = document.getElementById('schedule').value;
-  const ts     = parseTime(document.getElementById('time-start').value);
-  const te     = parseTime(document.getElementById('time-end').value);
+  const ts     = document.getElementById('time-start').value;
+  const te     = document.getElementById('time-end').value;
   const ds     = document.getElementById('date-start').value;
   const de     = document.getElementById('date-end').value;
   const poll   = document.getElementById('poll-interval').value;
