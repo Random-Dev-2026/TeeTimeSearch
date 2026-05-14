@@ -354,8 +354,17 @@
       </div>
     </div>
     <div class="field" style="margin-top:14px;">
-      <label>Login Type <span class="badge">select one</span></label>
-      <div class="login-types" id="login-types"></div>
+      <label for="login-type">Login Type</label>
+      <div class="select-wrap">
+        <select id="login-type">
+          <option value="Resident" selected>Resident</option>
+          <option value="Non-Resident">Non-Resident</option>
+          <option value="Senior Resident">Senior Resident</option>
+          <option value="Junior">Junior</option>
+          <option value="Member">Member</option>
+          <option value="Public">Public</option>
+        </select>
+      </div>
       <div class="field-error" id="err-login-type">Please select a login type.</div>
     </div>
   </div>
@@ -647,7 +656,6 @@
 
 <script>
 // ── State ──────────────────────────────────────────────────────────────────────
-let selectedLoginType = 'Resident';
 let selectedPlayers   = 2;
 let torEnabled        = true;
 let envText           = '';  // kept for compatibility
@@ -655,9 +663,6 @@ let envText           = '';  // kept for compatibility
 const GH_REPO = 'TeeTimeSearch';
 const WORKFLOW_FILE = 'tee-time-monitor.yml';
 
-const LOGIN_TYPES = [
-  'Resident', 'Non-Resident', 'Senior Resident', 'Junior', 'Member', 'Public'
-];
 
 const SCHEDULES = [
   { id: '2432', name: 'Bethpage Black' },
@@ -671,7 +676,6 @@ const SCHEDULES = [
 // ── Init ──────────────────────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
   setDefaultDates();
-  renderLoginTypes();
   document.getElementById('time-start').value = '07:00';
   document.getElementById('time-end').value   = '11:30';
 
@@ -712,22 +716,6 @@ function updateIntervalHint() {
   }
 }
 
-// ── Login types ───────────────────────────────────────────────────────────────
-function renderLoginTypes() {
-  const c = document.getElementById('login-types');
-  c.innerHTML = '';
-  LOGIN_TYPES.forEach(lt => {
-    const btn = document.createElement('button');
-    btn.className = 'login-btn' + (lt === selectedLoginType ? ' active' : '');
-    btn.textContent = lt;
-    btn.onclick = () => {
-      selectedLoginType = lt;
-      document.querySelectorAll('.login-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-    };
-    c.appendChild(btn);
-  });
-}
 
 // ── Player buttons (wired in main DOMContentLoaded) ─────────────────────────
 
@@ -773,7 +761,7 @@ function validate() {
     }
   });
   document.getElementById('err-login-type').classList.remove('visible');
-  if (!selectedLoginType) { document.getElementById('err-login-type').classList.add('visible'); ok = false; }
+  // select always has a value — no validation needed
 
   document.getElementById('err-time').classList.remove('visible');
   const ts = document.getElementById('time-start').value;
@@ -856,7 +844,7 @@ async function triggerWorkflow() {
     inputs: {
       foreup_username: u,
       foreup_password: p,
-      login_type:      selectedLoginType,
+      login_type:      document.getElementById('login-type').value,
       schedule_id:     sched,
       window_start:    ts,
       window_end:      te,
@@ -997,7 +985,6 @@ function resetForm() {
   document.getElementById('password').value = '';
   selectedLoginType = 'Resident';
   selectedPlayers   = 2;
-  renderLoginTypes();
   document.querySelectorAll('.player-btn').forEach(b => b.classList.toggle('active', b.dataset.players === '2'));
   setDefaultDates();
   document.getElementById('time-start').value = '07:00';
